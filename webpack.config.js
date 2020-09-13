@@ -12,6 +12,9 @@ module.exports = (env, argv) => {
       path: path.join(__dirname, 'dist'),
       filename: "[name].js"
     }, // NEW Ends
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
     plugins: [htmlPlugin],
     module: {
       rules: [
