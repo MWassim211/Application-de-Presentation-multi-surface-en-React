@@ -1,10 +1,7 @@
-/* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './components/Header/index';
-import Content from './components/Content/index';
-import AppToolbar from './components/AppToolbar';
 import Board from './components/Board';
+import AppToolbar from './components/AppToolbar';
 
 const DONNEES_CI_DESSUS = [
   {
@@ -26,7 +23,7 @@ const DONNEES_CI_DESSUS = [
         type: 'postit',
         board: '1',
         title: 'TP 2',
-        text: "Le TP porte sur la creation d'un outil de presentation HTML",
+        text: 'Le TP porte sur la creation d\'un outil de presentation HTML',
         visible: true,
         color: '#00E',
       },
@@ -57,13 +54,17 @@ const DONNEES_CI_DESSUS = [
     postits: [],
   },
 ];
-const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
-const Index = () => (
-  <div className="container">
-    <AppToolbar />
-    <Board board={boards} index={0} />
-    <Header />
-    <Content />
-  </div>
-);
-ReactDOM.render(<Index />, document.getElementById('root'));
+
+function App() {
+  const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
+
+  return (
+    <div className="app">
+      { setBoards }
+      <AppToolbar boards={boards} index={0} />
+      <Board board={boards} index={0} />
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));

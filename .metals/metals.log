@@ -1,0 +1,6 @@
+2020.10.12 20:05:39 INFO  started: Metals version 0.9.4 in workspace '/home/michelle/Master/M2/WEB SYNCHRONES ET MULTIDISPOSITIFS/tiw8-tp2' for client vscode.
+2020.10.12 20:05:42 INFO  time: initialize in 3.16s
+2020.10.12 20:05:44 WARN  no build tool detected in workspace '/home/michelle/Master/M2/WEB SYNCHRONES ET MULTIDISPOSITIFS/tiw8-tp2'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+Oct 12, 2020 8:13:56 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTraceNotification
+2020.10.13 00:46:19 INFO  shutting down Metals
