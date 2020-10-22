@@ -5,6 +5,14 @@ import Header from './components/Header/index';
 import Content from './components/Content/index';
 import AppToolbar from './components/AppToolbar';
 import Board from './components/Board';
+import Drawer from './components/Drawer'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
 
 const DONNEES_CI_DESSUS = [
   {
@@ -50,20 +58,34 @@ const DONNEES_CI_DESSUS = [
   },
   {
     type: 'board',
-    board: '2',
+    id: '2',
     title: 'Courses',
     active: false,
     notes: '',
-    postits: [],
+    postits: [{
+      type: 'postit',
+      board: '1',
+      title: 'TP 42',
+      text: 'Le TP 4',
+      visible: true,
+      color: '#0E0',
+    },],
   },
 ];
-const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
-const Index = () => (
-  <div className="container">
-    <AppToolbar />
-    <Board board={boards} index={0} />
-    <Header />
-    <Content />
-  </div>
-);
-ReactDOM.render(<Index />, document.getElementById('root'));
+function App() {
+  const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
+
+  return (
+    <Router>
+      <div className="app">
+        <AppToolbar boards={boards} />
+        {/* <Board board={boards} index={0}/> */}
+        <Switch>
+          <Route path="/:id" render={(routeProps) => <Board boards={boards} match={routeProps.match} />}></Route>
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));

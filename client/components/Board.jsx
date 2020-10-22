@@ -1,41 +1,49 @@
+/* eslint-disable */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import Postit from './postiti';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    flexGrow: 1,
   },
-});
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 
 function Board(props) {
   const classes = useStyles();
-  const { board, index } = props;
+  // eslint-disable-next-line no-unused-vars
+  const { boards, index } = props;
+  const { id } = props.match.params;
   return (
-    <div>
-      <Card className={classes.root}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
-            {board}
-            {index}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </Card>
+    <div className={classes.root}>
+      <Grid container spacing={3} justify="center">
+        {console.log(id)}
+        {console.log(boards)}
+        {boards[id-1].postits.map((element) => (
+          <Grid item lg="auto" xs={3} key={element.title}>
+            <Postit param={element} />
+          </Grid>
+        ))}
+        ;
+      </Grid>
     </div>
   );
 }
 
 Board.propTypes = {
   board: PropTypes.arrayOf(PropTypes.object).isRequired,
-  index: PropTypes.number.isRequired,
+  index: PropTypes.number,
+};
+
+Board.defaultProps = {
+  index: 0,
 };
 
 export default Board;
