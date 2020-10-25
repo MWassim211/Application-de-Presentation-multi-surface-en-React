@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useLocation } from 'react-router-dom';
 import Drawer from './Drawer';
 import FormPostitDialog from './FormPostitDialog';
+import { createPostit, createBoard } from '../actions/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +32,22 @@ const mapStateToProps = (state) => ({
   boards: state.boards,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  createBoard: (name, title) => dispatch(createBoard({ name, title })),
+  createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
+});
+
 function AppToolbar(props) {
   const classes = useStyles();
   const { boards } = props;
   const [state, setState] = useState(false);
   const [postitFormState, setPostitFormState] = useState(false);
+  const [boardName, setBoardName] = useState('');
+  const [boardsTitle, setboardsTitle] = useState('');
+  const [postitDesc, setpostitDesc] = useState('');
+  const [postitTitle, setpostitTitle] = useState('');
   const location = useLocation();
+
   const handleOnClickMenu = () => {
     setState(true);
   };
@@ -48,6 +61,28 @@ function AppToolbar(props) {
 
   const handleFormClose = () => {
     setPostitFormState(false);
+    if (location.pathname === '/') {
+      props.createBoard(boardName, boardsTitle);
+    } else {
+      // eslint-disable-next-line radix
+      props.createPostit(postitDesc, postitTitle, parseInt(location.pathname.charAt(1)));
+    }
+  };
+
+  const handleBNameOnChange = (e) => {
+    setBoardName(e.target.value);
+  };
+
+  const handleBNotesOnChange = (e) => {
+    setboardsTitle(e.target.value);
+  };
+
+  const handlePdescOnchange = (e) => {
+    setpostitDesc(e.target.value);
+  };
+
+  const handlePTitleOnChange = (e) => {
+    setpostitTitle(e.target.value);
   };
 
   return (
@@ -65,7 +100,19 @@ function AppToolbar(props) {
           <Fab onClick={handleClickOpen} color="secondary" aria-label="add">
             <AddIcon />
           </Fab>
-          <FormPostitDialog open={postitFormState} onFormClose={handleFormClose} />
+          <FormPostitDialog
+            open={postitFormState}
+            onFormClose={handleFormClose}
+            locationPathName={location.pathname}
+            boardName={boardName}
+            boardsTitle={boardsTitle}
+            postitDesc={postitDesc}
+            postitTitle={postitTitle}
+            handleBNameOnChange={handleBNameOnChange}
+            handleBNotesOnChange={handleBNotesOnChange}
+            handlePdescOnchange={handlePdescOnchange}
+            handlePTitleOnChange={handlePTitleOnChange}
+          />
         </Toolbar>
       </AppBar>
     </div>
@@ -76,4 +123,4 @@ AppToolbar.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default connect(mapStateToProps)(AppToolbar);
+export default connect(mapStateToProps, mapDispatchToProps)(AppToolbar);

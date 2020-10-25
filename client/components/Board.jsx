@@ -6,7 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Postit from './postiti';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import {deletePostit} from '../actions/index'
+import {deleteBoard, deletePostit} from '../actions/index'
+import {withRouter} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deletePositit : (idBoard,title) => dispatch(deletePostit({id:idBoard,title:title}))
+    deletePositit : (idBoard,title) => dispatch(deletePostit({id:idBoard,title:title})),
+    deleteBoard : (idBoard) => dispatch(deleteBoard({id:idBoard}))
   }
 }
 
@@ -41,6 +43,11 @@ function Board(props) {
   const { id } = props.match.params;
   const handleDeleteClick = (id,title) => {
     props.deletePositit(id,title)
+  }
+  const handleDeleteBoardClick= (id)=>{
+    props.deleteBoard(id);
+    props.history.push('/')
+    
   }
   return (
     <div className={classes.root}>
@@ -55,6 +62,7 @@ function Board(props) {
         ))}
         ;
       </Grid>
+      <Button variant="contained" onClick={()=>handleDeleteBoardClick(id)}>Delete Board</Button>
     </div>
   );
 }
@@ -68,4 +76,4 @@ Board.defaultProps = {
   index: 0,
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(Board);
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Board));

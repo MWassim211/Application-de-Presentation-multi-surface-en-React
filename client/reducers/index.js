@@ -70,8 +70,34 @@ const initialState = {
 function rootReducer(state = initialState, action) {
   console.log(action);
   switch (action.type) {
-    case CREATE_POSTIT:
-      return;
+    case CREATE_POSTIT:{
+      const indexBoard = action.payload.idBoard - 1
+      const newpostit = {
+        type: 'postit',
+        board: action.payload.idBoard.toString(),
+        title: action.payload.title,
+        text: action.payload.desc,
+        visible: true,
+        color: '#0E0',
+      }
+      const res = {
+        ...state,
+        boards : [
+          ...state.boards.slice(0,indexBoard),
+          {
+            ...state.boards[indexBoard],
+            postits : [
+              ...state.boards[indexBoard].postits,
+              newpostit,
+            ]
+          },
+          ...state.boards.slice(indexBoard+1)
+        ]
+      }
+      console.log(res)
+      return res;
+    }
+      
     case DELETE_POSTIT: {
       const newpostitis = state.boards[parseInt(action.payload.id)-1].postits.filter((postit) => postit.title !== action.payload.title);
       const index = action.payload.id-1;
@@ -89,10 +115,40 @@ function rootReducer(state = initialState, action) {
       console.log(res)
       return res;
     }
-    case CREATE_BOARD:
-      return;
-    case DELETE_BOARD:
-      return;
+    case CREATE_BOARD:{
+      const index = state.boards.length+1;
+      const newBoard = {
+        type: 'board',
+        id: index.toString(),
+        title: action.payload.title,
+        active: false,
+        notes: '',
+        postits: [],
+      }
+      const res =  {
+        ...state,
+        boards : [
+          ...state.boards,
+          newBoard,
+        ]
+      }
+      console.log(res)
+      return res;
+    }
+      
+    case DELETE_BOARD:{
+      const index = parseInt(action.payload.id)-1;
+      const res = {
+        ...state,
+        boards : [
+          ...state.boards.slice(0,index),
+          ...state.boards.slice(index+1)
+        ]
+      }
+      console.log(res)
+      return res;
+    }
+      
     case NEXT_BOARD:
       return;
     case PREVIOUS_BOARD:
