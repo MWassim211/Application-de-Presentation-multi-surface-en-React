@@ -9,7 +9,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import { useLocation } from 'react-router-dom';
 import Drawer from './Drawer';
+import FormPostitDialog from './FormPostitDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,16 +33,28 @@ function AppToolbar(props) {
   const classes = useStyles();
   const { boards } = props;
   const [state, setState] = useState(false);
+  const [postitFormState, setPostitFormState] = useState(false);
+  const location = useLocation();
   const handleOnClickMenu = () => {
     setState(true);
   };
   const handleOnClose = () => {
     setState(false);
   };
+
+  const handleClickOpen = () => {
+    setPostitFormState(true);
+  };
+
+  const handleFormClose = () => {
+    setPostitFormState(false);
+  };
+
   return (
     <div>
       <AppBar position="static">
         <Toolbar>
+          {console.log(location.pathname)}
           <IconButton onClick={handleOnClickMenu} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
@@ -48,9 +62,10 @@ function AppToolbar(props) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          <Fab color="secondary" aria-label="add">
+          <Fab onClick={handleClickOpen} color="secondary" aria-label="add">
             <AddIcon />
           </Fab>
+          <FormPostitDialog open={postitFormState} onFormClose={handleFormClose} />
         </Toolbar>
       </AppBar>
     </div>
