@@ -1,11 +1,13 @@
 /* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './components/Header/index';
-import Content from './components/Content/index';
 import AppToolbar from './components/AppToolbar';
 import Board from './components/Board';
 import Drawer from './components/Drawer'
+import store from './store/index'
+import { createBoard } from './actions/index'
+window.store = store;
+window.createBoard = createBoard;
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +15,7 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+import { Provider } from 'react-redux'
 
 const DONNEES_CI_DESSUS = [
   {
@@ -73,18 +76,19 @@ const DONNEES_CI_DESSUS = [
   },
 ];
 function App() {
-  const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
-
+  // const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
+  
   return (
-    <Router>
-      <div className="app">
-        <AppToolbar boards={boards} />
-        {/* <Board board={boards} index={0}/> */}
-        <Switch>
-          <Route path="/:id" render={(routeProps) => <Board boards={boards} match={routeProps.match} />}></Route>
-        </Switch>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="app">
+          <AppToolbar />
+          <Switch>
+            <Route path="/:id" render={(routeProps) => <Board match={routeProps.match} />}></Route>
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   );
 }
 

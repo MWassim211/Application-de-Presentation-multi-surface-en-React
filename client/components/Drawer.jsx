@@ -25,7 +25,7 @@ function Drawer({ state, onDrawerClose, boards }) {
     >
       <List>
         {boards.map((element) => (
-          <ListItem key={element.id}>
+          <ListItem key={element.id} onClick={onDrawerClose}>
             <Link to={element.id}>{element.title}</Link>
           </ListItem>
         ))}

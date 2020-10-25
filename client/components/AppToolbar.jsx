@@ -6,6 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import Drawer from './Drawer';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,17 +23,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const mapStateToProps = (state) => ({
+  boards: state.boards,
+});
+
 function AppToolbar(props) {
   const classes = useStyles();
   const { boards } = props;
   const [state, setState] = useState(false);
   const handleOnClickMenu = () => {
     setState(true);
-    console.log('set to opened');
   };
   const handleOnClose = () => {
     setState(false);
-    console.log('set to closed');
   };
   return (
     <div>
@@ -43,6 +48,9 @@ function AppToolbar(props) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
+          <Fab color="secondary" aria-label="add">
+            <AddIcon />
+          </Fab>
         </Toolbar>
       </AppBar>
     </div>
@@ -50,8 +58,7 @@ function AppToolbar(props) {
 }
 
 AppToolbar.propTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default AppToolbar;
+export default connect(mapStateToProps)(AppToolbar);
