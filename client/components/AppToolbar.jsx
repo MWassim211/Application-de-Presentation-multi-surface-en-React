@@ -12,9 +12,13 @@ import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { useLocation } from 'react-router-dom';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Drawer from './Drawer';
 import FormPostitDialog from './FormPostitDialog';
-import { createPostit, createBoard } from '../actions/index';
+import {
+  createPostit, createBoard, previousBoard, nextBoard,
+} from '../actions/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +39,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createBoard: (name, title) => dispatch(createBoard({ name, title })),
   createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
+  nextBoard: () => dispatch(nextBoard({})),
 });
 
 function AppToolbar(props) {
@@ -84,6 +89,9 @@ function AppToolbar(props) {
   const handlePTitleOnChange = (e) => {
     setpostitTitle(e.target.value);
   };
+  const handleOnNextClicker = () => {
+
+  };
 
   return (
     <div>
@@ -97,6 +105,12 @@ function AppToolbar(props) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <NavigateBeforeIcon />
+          </IconButton>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <NavigateNextIcon />
+          </IconButton>
           <Fab onClick={handleClickOpen} color="secondary" aria-label="add">
             <AddIcon />
           </Fab>
