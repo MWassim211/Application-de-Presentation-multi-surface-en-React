@@ -49,20 +49,18 @@ function Board(props) {
   const handleDeleteClick = (id,title) => {
     props.deletePositit(id,title)
   }
+
   const handleDeleteBoardClick= (id)=>{
     props.deleteBoard(id);
     props.history.push('/')
-    
   }
+  
   return (
     <div className={classes.root}>
-      <Grid className={classes.grid} container  spacing={3} justify="left">
-        {console.log(id)}
-        {console.log(boards)}
+      <Grid className={classes.grid} container  spacing={3} justify="flex-start">
         {boards[id-1].postits.map((element) => (
           <Grid item lg={3} xs={6} key={element.title}>
-            <Postit param={element} />
-            {/* <Button variant="contained" onClick={()=>handleDeleteClick(element.board,element.title)}>Delete Postit</Button> */}
+            <Postit param={element} handleOnDelete={handleDeleteClick}/>
           </Grid>
         ))}
         ;

@@ -57,7 +57,7 @@ const initialState = {
       notes: '',
       postits: [{
         type: 'postit',
-        board: '1',
+        board: '2',
         title: 'TP 42',
         text: 'Le TP 4',
         visible: true,
