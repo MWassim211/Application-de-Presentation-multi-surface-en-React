@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  grid : {
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    
+  }
 }));
 
 
@@ -51,13 +56,13 @@ function Board(props) {
   }
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} justify="center">
+      <Grid className={classes.grid} container  spacing={3} justify="left">
         {console.log(id)}
         {console.log(boards)}
         {boards[id-1].postits.map((element) => (
-          <Grid item lg="auto" xs={3} key={element.title}>
+          <Grid item lg={3} xs={6} key={element.title}>
             <Postit param={element} />
-            <Button variant="contained" onClick={()=>handleDeleteClick(element.board,element.title)}>Delete Postit</Button>
+            {/* <Button variant="contained" onClick={()=>handleDeleteClick(element.board,element.title)}>Delete Postit</Button> */}
           </Grid>
         ))}
         ;

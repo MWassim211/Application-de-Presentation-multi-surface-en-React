@@ -68,9 +68,13 @@ function AppToolbar(props) {
     setPostitFormState(false);
     if (location.pathname === '/') {
       props.createBoard(boardName, boardsTitle);
+      setBoardName('');
+      setboardsTitle('');
     } else {
       // eslint-disable-next-line radix
       props.createPostit(postitDesc, postitTitle, parseInt(location.pathname.charAt(1)));
+      setpostitDesc('');
+      setpostitTitle('');
     }
   };
 
