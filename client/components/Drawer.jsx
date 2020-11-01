@@ -1,9 +1,11 @@
 import React from 'react';
 import {
-  Drawer as MUIDrawer, ListItem, List,
+  // eslint-disable-next-line no-unused-vars
+  Drawer as MUIDrawer, ListItem, List, ListItemText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line no-unused-vars
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -11,7 +13,9 @@ const useStyles = makeStyles({
 });
 
 // eslint-disable-next-line no-unused-vars
-function Drawer({ state, onDrawerClose, boards }) {
+function Drawer({
+  state, onDrawerClose, boards, onLinkClick,
+}) {
   const classes = useStyles();
 
   return (
@@ -25,8 +29,9 @@ function Drawer({ state, onDrawerClose, boards }) {
     >
       <List>
         {boards.map((element) => (
-          <ListItem key={element.id} onClick={onDrawerClose}>
+          <ListItem key={element.id} onClick={() => onLinkClick(element.id)}>
             <Link to={element.id}>{element.title}</Link>
+            {/* <ListItemText>{element.title}</ListItemText> */}
           </ListItem>
         ))}
       </List>
@@ -39,6 +44,7 @@ Drawer.propTypes = {
   onDrawerClose: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onLinkClick: PropTypes.func.isRequired,
 };
 
 export default Drawer;

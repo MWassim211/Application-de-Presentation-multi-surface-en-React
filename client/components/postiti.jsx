@@ -16,6 +16,8 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
+    height : 150,
+
   },
   fullHeightCard: {
     height: '100%',
@@ -34,14 +36,13 @@ function postit(props) {
   const { param, handleOnDelete } = props;
   return (
     <div>
-      <Card className={classes.fullHeightCard}>
-        <CardContent>
+      <Card >
+        <CardContent className={classes.root}>
           <Typography gutterBottom variant="h5" component="h2">
             {param.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {param.text}
-            {param.board}
           </Typography>
         </CardContent>
         <Divider />

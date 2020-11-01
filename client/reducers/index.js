@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {
-  DELETE_POSTIT, CREATE_BOARD, DELETE_BOARD, CREATE_POSTIT, NEXT_BOARD, PREVIOUS_BOARD,
+  DELETE_POSTIT, CREATE_BOARD, DELETE_BOARD, CREATE_POSTIT, NEXT_BOARD, PREVIOUS_BOARD, SET_INDEX
 } from '../actions/index';
 /* eslint-disable no-unreachable */
 /* eslint-disable consistent-return */
@@ -65,13 +65,14 @@ const initialState = {
       }],
     },
   ],
-};
+}
 
 function rootReducer(state = initialState, action) {
   console.log(action);
   switch (action.type) {
     case CREATE_POSTIT:{
-      const indexBoard = action.payload.idBoard - 1
+      // const indexBoard = action.payload.idBoard - 1
+      const indexBoard = state.boards.findIndex((e)=>e.id == action.payload.idBoard)
       const newpostit = {
         type: 'postit',
         board: action.payload.idBoard.toString(),
@@ -99,24 +100,31 @@ function rootReducer(state = initialState, action) {
     }
       
     case DELETE_POSTIT: {
-      const newpostitis = state.boards[parseInt(action.payload.id)-1].postits.filter((postit) => postit.title !== action.payload.title);
+      const indexBoard = state.boards.findIndex((e)=>e.id == action.payload.id)
+      const newpostitis = state.boards[indexBoard].postits.filter((postit) => postit.title !== action.payload.title);
       const index = action.payload.id-1;
       const res = {
         ...state,
         boards : [
-          ...state.boards.slice(0,index),
+          ...state.boards.slice(0,indexBoard),
           {
-            ...state.boards[index],
+            ...state.boards[indexBoard],
             postits : newpostitis
           },
-          ...state.boards.slice(index+1)
+          ...state.boards.slice(indexBoard+1)
         ],
       }
       console.log(res)
       return res;
     }
     case CREATE_BOARD:{
-      const index = state.boards.length+1;
+      let max = 0;
+      state.boards.forEach(e => {
+      if (parseInt(e.id) > max) {
+        max = parseInt(e.id)
+      }
+    });
+      const index = max+1;
       const newBoard = {
         type: 'board',
         id: index.toString(),
@@ -137,7 +145,8 @@ function rootReducer(state = initialState, action) {
     }
       
     case DELETE_BOARD:{
-      const index = parseInt(action.payload.id)-1;
+      const index = state.boards.findIndex((e)=>e.id == action.payload.id)
+      // const index = parseInt(action.payload.id)-1;
       const res = {
         ...state,
         boards : [
@@ -149,10 +158,31 @@ function rootReducer(state = initialState, action) {
       return res;
     }
       
-    case NEXT_BOARD:
-      return;
+    case NEXT_BOARD: {
+      console.log(action);
+      const maxBoards = state.boards.length;
+      console.log(maxBoards)
+      let next;
+      const currentBoardIndex = state.boards.findIndex(e=>e.id == state.index.toString());
+      (currentBoardIndex == -1 || currentBoardIndex == maxBoards - 1 ) ? next = 0 : next = currentBoardIndex +1;
+      const res = {
+        ...state,
+        index : parseInt(state.boards[next].id),
+      }
+      console.log(res);
+      return res;
+    }
     case PREVIOUS_BOARD:
       return;
+    case SET_INDEX: {
+      console.log(action)
+      const res = {
+        ...state,
+        index : parseInt(action.payload.index),
+      }
+      console.log(res)
+      return res;
+    }
     default:
       return state;
   }

@@ -9,7 +9,7 @@ import { createBoard } from './actions/index'
 window.store = store;
 window.createBoard = createBoard;
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   Link,

@@ -12,9 +12,11 @@ import PropTypes from 'prop-types';
 
 function FormPostitDialog(props) {
   // eslint-disable-next-line react/prop-types
-  const { open, onFormClose, locationPathName } = props;
+  const { open, onFormClose } = props;
   const {
-    boardName, boardsTitle, postitDesc, postitTitle,
+    boardName, boardsTitle, postitDesc, postitTitle, action, postitVisible, postitColor,
+    onPostitFormClose,
+    handleVisibleOnChange, handleColorOnChange,
   } = props;
   const {
     handleBNameOnChange, handleBNotesOnChange, handlePdescOnchange, handlePTitleOnChange,
@@ -22,7 +24,7 @@ function FormPostitDialog(props) {
   return (
     <div>
       <Dialog open={open} onClose={onFormClose} aria-labelledby="form-dialog-title">
-        { locationPathName === '/' ? (
+        { action === 'Create Board' ? (
           <div>
             <DialogTitle id="form-dialog-title">Nouveau Board</DialogTitle>
             <DialogContent>
@@ -47,7 +49,13 @@ function FormPostitDialog(props) {
                 fullWidth
               />
             </DialogContent>
+            <DialogActions>
+              <Button onClick={onFormClose} color="primary">
+                Create
+              </Button>
+            </DialogActions>
           </div>
+
         )
           : (
             <div>
@@ -73,15 +81,33 @@ function FormPostitDialog(props) {
                   onChange={(e) => handlePdescOnchange(e)}
                   fullWidth
                 />
+                <TextField
+                  margin="dense"
+                  id="postitvisible"
+                  label="Visible"
+                  type="text"
+                  value={postitVisible}
+                  onChange={(e) => handleVisibleOnChange(e)}
+                  fullWidth
+                />
+                <TextField
+                  margin="dense"
+                  id="postitvisible"
+                  label="Visible"
+                  type="text"
+                  value={postitColor}
+                  onChange={(e) => handleColorOnChange(e)}
+                  fullWidth
+                />
 
               </DialogContent>
+              <DialogActions>
+                <Button onClick={onPostitFormClose} color="primary">
+                  Create
+                </Button>
+              </DialogActions>
             </div>
           )}
-        <DialogActions>
-          <Button onClick={onFormClose} color="primary">
-            Create
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
@@ -89,16 +115,37 @@ function FormPostitDialog(props) {
 
 FormPostitDialog.propType = {
   open: PropTypes.bool.isRequired,
-  onFormClose: PropTypes.func.isRequired,
-  locationPathName: PropTypes.string.isRequired,
-  boardName: PropTypes.string.isRequired,
-  boardsTitle: PropTypes.string.isRequired,
-  postitDesc: PropTypes.string.isRequired,
-  postitTitle: PropTypes.string.isRequired,
-  handleBNameOnChange: PropTypes.func.isRequired,
-  handleBNotesOnChange: PropTypes.func.isRequired,
-  handlePdescOnchange: PropTypes.func.isRequired,
-  handlePTitleOnChange: PropTypes.func.isRequired,
+  action: PropTypes.string.isRequired,
+  onFormClose: PropTypes.func,
+  boardName: PropTypes.string,
+  boardsTitle: PropTypes.string,
+  postitDesc: PropTypes.string,
+  postitTitle: PropTypes.string,
+  handleBNameOnChange: PropTypes.func,
+  handleBNotesOnChange: PropTypes.func,
+  handlePdescOnchange: PropTypes.func,
+  handlePTitleOnChange: PropTypes.func,
+  handleVisibleOnChange: PropTypes.func,
+  handleColorOnChange: PropTypes.func,
+  postitVisible: PropTypes.string,
+  postitColor: PropTypes.string,
+  onPostitFormClose: PropTypes.func,
+};
+FormPostitDialog.defaultProps = {
+  handleBNotesOnChange: null,
+  handlePTitleOnChange: null,
+  handleVisibleOnChange: null,
+  handleColorOnChange: null,
+  handlePdescOnchange: null,
+  handleBNameOnChange: null,
+  postitVisible: '',
+  postitColor: '',
+  onPostitFormClose: null,
+  onFormClose: null,
+  boardName: null,
+  boardsTitle: null,
+  postitDesc: null,
+  postitTitle: null,
 };
 
 export default FormPostitDialog;
