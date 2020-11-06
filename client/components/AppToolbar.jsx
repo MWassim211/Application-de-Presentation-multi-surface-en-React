@@ -42,12 +42,13 @@ const mapDispatchToProps = (dispatch) => ({
   createBoard: (name, title) => dispatch(createBoard({ name, title })),
   createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
   nextBoard: () => dispatch(nextBoard({})),
+  previousBoard: () => dispatch(previousBoard({})),
   setIndex: (index) => dispatch(setIndex({ index })),
 });
 
 function AppToolbar(props) {
   const classes = useStyles();
-  const { boards, index } = props;
+  const { boards, index, boardNameDisplay } = props;
   const [state, setState] = useState(false);
   const [postitFormState, setPostitFormState] = useState(false);
   const [boardName, setBoardName] = useState('');
@@ -93,11 +94,14 @@ function AppToolbar(props) {
     props.nextBoard();
   };
 
+  const handleOnPreviousClick = () => {
+    props.previousBoard();
+  };
+
   return (
     <div>
       <AppBar position="static">
         <Toolbar>
-          {console.log(location.pathname)}
           <IconButton onClick={handleOnClickMenu} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
@@ -108,9 +112,9 @@ function AppToolbar(props) {
             onLinkClick={handleOnLinkClick}
           />
           <Typography variant="h6" className={classes.title}>
-            News
+            {boardNameDisplay}
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnPreviousClick}>
             <NavigateBeforeIcon />
           </IconButton>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnNextClick}>
@@ -127,6 +131,7 @@ function AppToolbar(props) {
             boardsTitle={boardsTitle}
             handleBNameOnChange={handleBNameOnChange}
             handleBNotesOnChange={handleBNotesOnChange}
+
           />
         </Toolbar>
       </AppBar>
@@ -136,6 +141,8 @@ function AppToolbar(props) {
 
 AppToolbar.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
+  boardNameDisplay: PropTypes.string.isRequired,
+
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppToolbar));

@@ -172,13 +172,28 @@ function rootReducer(state = initialState, action) {
       console.log(res);
       return res;
     }
-    case PREVIOUS_BOARD:
-      return;
-    case SET_INDEX: {
-      console.log(action)
+    case PREVIOUS_BOARD:{
+      console.log(action);
+      const maxBoards = state.boards.length;
+      console.log(maxBoards)
+      let next;
+      const currentBoardIndex = state.boards.findIndex(e=>e.id == state.index.toString());
+      (currentBoardIndex == -1 || currentBoardIndex == 0 ) ? next = maxBoards - 1 : next = currentBoardIndex - 1;
       const res = {
         ...state,
-        index : parseInt(action.payload.index),
+        index : parseInt(state.boards[next].id),
+      }
+      console.log(res);
+      return res;
+    }
+    case SET_INDEX: {
+      console.log(action)
+      const indexElem = state.boards.findIndex((e)=>e.id === action.payload.index)
+      if(indexElem == -1)
+        return;
+      const res = {
+        ...state,
+        index : indexElem + 1,
       }
       console.log(res)
       return res;

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React , {useState } from 'react';
 import ReactDOM from 'react-dom';
 import AppToolbar from './components/AppToolbar';
 import Board from './components/Board';
@@ -75,16 +75,22 @@ const DONNEES_CI_DESSUS = [
     },],
   },
 ];
+
+
 function App() {
   // const [boards, setBoards] = React.useState(DONNEES_CI_DESSUS);
-  
+  const [boardDisplay, setBoardDisplay] = useState('');
+  const handleOnBoardChange = (name) => {
+    setBoardDisplay(name);
+  };
+
   return (
     <Provider store={store}>
       <Router>
         <div className="app">
-          <AppToolbar />
+          <AppToolbar boardNameDisplay={boardDisplay}/>
           <Switch>
-            <Route path="/:id" render={(routeProps) => <Board match={routeProps.match} />}></Route>
+            <Route path="/:id" render={(routeProps) => <Board match={routeProps.match} onBoardChange={handleOnBoardChange} />}></Route>
           </Switch>
         </div>
       </Router>

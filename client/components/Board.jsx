@@ -1,12 +1,12 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState , useEffect, useLayoutEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Postit from './postiti';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import {deleteBoard, deletePostit, createPostit} from '../actions/index'
+import {deleteBoard, deletePostit, createPostit, setIndex} from '../actions/index'
 import {useParams, withRouter,useLocation} from 'react-router-dom'
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = (state) => {
   return {
-    boards : state.boards
+    boards : state.boards,
+    index : state.index
   }
 }
 
@@ -47,7 +48,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deletePositit : (idBoard,title) => dispatch(deletePostit({id:idBoard,title:title})),
     createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
-    deleteBoard : (idBoard) => dispatch(deleteBoard({id:idBoard}))
+    deleteBoard : (idBoard) => dispatch(deleteBoard({id:idBoard})),
+    setIndex : (index)=> dispatch(setIndex({index})),
   }
 }
 
@@ -55,9 +57,25 @@ const mapDispatchToProps = (dispatch) => {
 function Board(props) {
   const classes = useStyles();
   // eslint-disable-next-line no-unused-vars
-  const { boards} = props;
+  const { boards , index , onBoardChange} = props;
   // const { id } = props.match.params;
   const { id } = useParams()
+  useEffect(() => {
+    console.log('use effect hook called in board');
+    const elem = boards.findIndex((e)=>e.id==id)
+    
+    
+    console.log(elem)
+    if(elem == -1) {
+      //props.setIndex(id); 
+      
+      props.history.push(`/${index}`);
+    } else {
+      props.setIndex(id)
+      onBoardChange(boards[elem].title)
+    } 
+  }, [id]);
+
   const [postitFormState, setPostitFormState] = useState(false);
   const [postitTitle, setpostitTitle] = useState('');
   const [postitDesc, setpostitDesc] = useState('');
@@ -106,7 +124,12 @@ function Board(props) {
   }
 
   const GetIndexElem = () => {
-    return boards.findIndex((e)=> e.id == id);
+     if (boards.findIndex((e)=> e.id == id) == -1) {
+      return 0;
+    }else {
+      return boards.findIndex((e)=> e.id == id) ;
+    }
+    return boards.findIndex((e)=> e.id == id)
   }
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   // eslint-disable-next-line no-unused-vars
-  Drawer as MUIDrawer, ListItem, List, ListItemText,
+  Drawer as MUIDrawer, ListItem, List, ListItemText, Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -30,7 +30,8 @@ function Drawer({
       <List>
         {boards.map((element) => (
           <ListItem key={element.id} onClick={() => onLinkClick(element.id)}>
-            <Link to={element.id}>{element.title}</Link>
+            {/* <Link to={element.id}>{element.title}</Link> */}
+            <Button>{element.title}</Button>
             {/* <ListItemText>{element.title}</ListItemText> */}
           </ListItem>
         ))}
