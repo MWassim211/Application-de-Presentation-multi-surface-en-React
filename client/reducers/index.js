@@ -193,7 +193,8 @@ function rootReducer(state = initialState, action) {
         return;
       const res = {
         ...state,
-        index : indexElem + 1,
+        // index : indexElem + 1,
+        index : parseInt(state.boards[indexElem].id),
       }
       console.log(res)
       return res;

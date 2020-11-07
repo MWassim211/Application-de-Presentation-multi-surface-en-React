@@ -1,6 +1,9 @@
 const express = require('express');
 
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
 const port = process.env.PORT || 3000;
 
 const path = require('path');
@@ -21,6 +24,11 @@ app.get('/api', (req, res) => {
 app.get('/', (req, res) => {
   res.status(200).send('Hello World!');
 });
-app.listen(port, () => {
+// eslint-disable-next-line no-unused-vars
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('action', (msg) => { console.log('je vais la dispatche aux client'); socket.broadcast.emit('action_response', msg); });
+});
+http.listen(port, () => {
   console.log(`App listening on port: ${port}`);
 });

@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch) => {
     deletePositit : (idBoard,title) => dispatch(deletePostit({id:idBoard,title:title})),
     createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
     deleteBoard : (idBoard) => dispatch(deleteBoard({id:idBoard})),
-    setIndex : (index)=> dispatch(setIndex({index})),
+    setIndex : (index,trueorfalse)=> dispatch(setIndex({index,btnurl : trueorfalse})),
   }
 }
 
@@ -62,16 +62,20 @@ function Board(props) {
   const { id } = useParams()
   useEffect(() => {
     console.log('use effect hook called in board');
+    console.log(id)
+    console.log(index.toString())
     const elem = boards.findIndex((e)=>e.id==id)
     
     
     console.log(elem)
     if(elem == -1) {
       //props.setIndex(id); 
-      
+      console.log("pour push")
       props.history.push(`/${index}`);
     } else {
-      props.setIndex(id)
+      console.log("pour update ....")
+
+       props.setIndex(id,true)
       onBoardChange(boards[elem].title)
     } 
   }, [id]);

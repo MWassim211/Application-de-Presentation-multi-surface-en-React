@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => ({
   createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
   nextBoard: () => dispatch(nextBoard({})),
   previousBoard: () => dispatch(previousBoard({})),
-  setIndex: (index) => dispatch(setIndex({ index })),
+  setIndex: (index, trueorfalse) => dispatch(setIndex({ index, btnurl: trueorfalse })),
 });
 
 function AppToolbar(props) {
@@ -57,6 +57,7 @@ function AppToolbar(props) {
 
   useEffect(() => {
     console.log('use effect hook called');
+    console.log(index);
     props.history.push(`/${index}`);
   }, [index]);
 
@@ -69,8 +70,9 @@ function AppToolbar(props) {
 
   const handleOnLinkClick = (slide) => {
     setState(false);
-    props.setIndex(slide);
+    props.setIndex(slide, true);
   };
+
   const handleClickOpen = () => {
     setPostitFormState(true);
   };
