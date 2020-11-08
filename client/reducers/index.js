@@ -145,13 +145,14 @@ function rootReducer(state = initialState, action) {
     }
       
     case DELETE_BOARD:{
-      const index = state.boards.findIndex((e)=>e.id == action.payload.id)
+      const indexElem = state.boards.findIndex((e)=>e.id == action.payload.id)
       // const index = parseInt(action.payload.id)-1;
       const res = {
         ...state,
+        index : state.boards[0].id,
         boards : [
-          ...state.boards.slice(0,index),
-          ...state.boards.slice(index+1)
+          ...state.boards.slice(0,indexElem),
+          ...state.boards.slice(indexElem+1)
         ]
       }
       console.log(res)

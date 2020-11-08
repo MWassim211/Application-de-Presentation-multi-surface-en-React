@@ -46,10 +46,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deletePositit : (idBoard,title) => dispatch(deletePostit({id:idBoard,title:title})),
-    createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
-    deleteBoard : (idBoard) => dispatch(deleteBoard({id:idBoard})),
-    setIndex : (index,trueorfalse)=> dispatch(setIndex({index,btnurl : trueorfalse})),
+    deletePositit : (idBoard,title,flag) => dispatch(deletePostit({id:idBoard,title:title},{propagate : flag})),
+    createPostit: (desc, title, idBoard, flag) => dispatch(createPostit({ desc, title, idBoard },{propagate : flag})),
+    deleteBoard : (idBoard,flag) => dispatch(deleteBoard({id:idBoard},{propagate : flag})),
+    setIndex : (index,flag)=> dispatch(setIndex({index},{propagate : flag})),
   }
 }
 
@@ -65,7 +65,7 @@ function Board(props) {
     console.log(id)
     console.log(index.toString())
     const elem = boards.findIndex((e)=>e.id==id)
-    
+
     
     console.log(elem)
     if(elem == -1) {
@@ -75,7 +75,7 @@ function Board(props) {
     } else {
       console.log("pour update ....")
 
-       props.setIndex(id,true)
+      props.setIndex(id,true)
       onBoardChange(boards[elem].title)
     } 
   }, [id]);
@@ -111,7 +111,7 @@ function Board(props) {
     setPostitFormState(false);
     const uri = location.pathname;
     console.log(uri.slice(1));
-    props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1)));
+    props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1)),true);
     setpostitDesc('');
     setpostitTitle('');
     setVisible('');
@@ -119,12 +119,12 @@ function Board(props) {
   }
 
   const handleDeleteClick = (id,title) => {
-    props.deletePositit(id,title);
+    props.deletePositit(id,title,true);
   }
 
   const handleDeleteBoardClick= (id)=>{
-    props.deleteBoard(id);
-    props.history.push('/');
+    props.deleteBoard(id,true);
+    // props.history.push('/');
   }
 
   const GetIndexElem = () => {
@@ -133,7 +133,6 @@ function Board(props) {
     }else {
       return boards.findIndex((e)=> e.id == id) ;
     }
-    return boards.findIndex((e)=> e.id == id)
   }
 
   return (

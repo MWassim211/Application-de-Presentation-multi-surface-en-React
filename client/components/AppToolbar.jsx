@@ -39,11 +39,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createBoard: (name, title) => dispatch(createBoard({ name, title })),
+  createBoard: (name, title, flag) => dispatch(createBoard({ name, title }, { propagate: flag })),
   createPostit: (desc, title, idBoard) => dispatch(createPostit({ desc, title, idBoard })),
-  nextBoard: () => dispatch(nextBoard({})),
-  previousBoard: () => dispatch(previousBoard({})),
-  setIndex: (index, trueorfalse) => dispatch(setIndex({ index, btnurl: trueorfalse })),
+  nextBoard: (flag) => dispatch(nextBoard({}, { propagate: flag })),
+  previousBoard: (flag) => dispatch(previousBoard({}, { propagate: flag })),
+  setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
 });
 
 function AppToolbar(props) {
@@ -79,7 +79,7 @@ function AppToolbar(props) {
 
   const handleFormClose = () => {
     setPostitFormState(false);
-    props.createBoard(boardName, boardsTitle);
+    props.createBoard(boardName, boardsTitle, true);
     setBoardName('');
     setboardsTitle('');
   };
@@ -93,11 +93,11 @@ function AppToolbar(props) {
   };
 
   const handleOnNextClick = () => {
-    props.nextBoard();
+    props.nextBoard(true);
   };
 
   const handleOnPreviousClick = () => {
-    props.previousBoard();
+    props.previousBoard(true);
   };
 
   return (
