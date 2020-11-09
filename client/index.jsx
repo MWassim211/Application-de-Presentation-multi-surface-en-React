@@ -3,9 +3,12 @@ import React , {useState } from 'react';
 import ReactDOM from 'react-dom';
 import AppToolbar from './components/AppToolbar';
 import Board from './components/Board';
+import BoardMobile from './components/BoardMobile';
 import Drawer from './components/Drawer'
+import MobileToolbar from './components/MobileToolbar';
 import store from './store/index'
 import { createBoard } from './actions/index'
+import {isMobile} from 'react-device-detect';
 window.store = store;
 window.createBoard = createBoard;
 import {
@@ -13,7 +16,8 @@ import {
   Switch,
   Route,
   Link,
-  useParams
+  useParams,
+  Redirect
 } from "react-router-dom";
 import { Provider } from 'react-redux'
 
@@ -89,9 +93,41 @@ function App() {
       <Router>
         <div className="app">
           <AppToolbar boardNameDisplay={boardDisplay}/>
+          {console.log(isMobile+"hallo")}
+          {/* <Switch>
+            <Route exact path="/:id" render={(routeProps) => isMobile ? <Redirect to="/:id/postit/1" /> : <Board match={routeProps.match} onBoardChange={handleOnBoardChange} />}></Route>
+            <Route exact path="/:id/postit/:idpostit" render={(routeProps) => <Board match={routeProps.match} onBoardChange={handleOnBoardChange} test={isMobile}/>}></Route> 
+          </Switch> */}
           <Switch>
-            <Route path="/:id" render={(routeProps) => <Board match={routeProps.match} onBoardChange={handleOnBoardChange} />}></Route>
+          {/* <Route exact path="/">
+          {isMobile ? <Redirect to={`/${store.getState().index}/postit/1`} /> : <Board onBoardChange={handleOnBoardChange} />}
+        </Route> */}
+            {/* <Route exact path="/:id">
+              { isMobile ? <Redirect from="/:id" to="/:id/postit/1" /> : <Board onBoardChange={handleOnBoardChange} /> }
+            </Route>
+            <Route  exact path="/:id/postit/:idPostit">
+              {isMobile ? <BoardMobile onBoardChange={handleOnBoardChange}></BoardMobile> : <Redirect to="/"></Redirect>}
+            </Route> */}
+            {
+              isMobile
+              && <Redirect exact from="/:id" to="/:id/postit/1" />
+            }
+            {
+              !isMobile
+              && <Redirect exact from="/:id/postit/:idPostit" to="/:id" />
+            }
+            <Route exact path="/:id">
+              <Board onBoardChange={handleOnBoardChange} /> 
+            </Route>
+            <Route  exact path="/:id/postit/:idPostit">
+              <BoardMobile onBoardChange={handleOnBoardChange}></BoardMobile> 
+            </Route>
           </Switch>
+{/* 
+          {
+              isMobile
+              && <MobileToolbar></MobileToolbar>
+            } */}
         </div>
       </Router>
     </Provider>

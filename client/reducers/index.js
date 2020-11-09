@@ -1,12 +1,14 @@
 /* eslint-disable */
 import {
-  DELETE_POSTIT, CREATE_BOARD, DELETE_BOARD, CREATE_POSTIT, NEXT_BOARD, PREVIOUS_BOARD, SET_INDEX
+  DELETE_POSTIT, CREATE_BOARD, DELETE_BOARD, CREATE_POSTIT, NEXT_BOARD, PREVIOUS_BOARD, SET_INDEX,
+  PREVIOUS_POSTIT, NEXT_POSTIT
 } from '../actions/index';
 /* eslint-disable no-unreachable */
 /* eslint-disable consistent-return */
 /* eslint-disable no-undef */
 const initialState = {
   index: 1,
+  currentPostit : '1',
   boards: [
     {
       type: 'board',
@@ -149,7 +151,7 @@ function rootReducer(state = initialState, action) {
       // const index = parseInt(action.payload.id)-1;
       const res = {
         ...state,
-        index : state.boards[0].id,
+        index : parseInt(state.boards[0].id),
         boards : [
           ...state.boards.slice(0,indexElem),
           ...state.boards.slice(indexElem+1)
@@ -196,6 +198,46 @@ function rootReducer(state = initialState, action) {
         ...state,
         // index : indexElem + 1,
         index : parseInt(state.boards[indexElem].id),
+      }
+      console.log(res)
+      return res;
+    }
+    case NEXT_POSTIT : {
+      const indexElem = state.boards.findIndex((e)=>e.id === action.payload.id)
+      console.log(indexElem)
+      const maxlengthPostitTab = state.boards[indexElem].postits.length;
+      let indexPostit = parseInt(action.payload.idPostit)
+      if(maxlengthPostitTab==0){
+        const res = {
+          ...state,
+          currentPostit : '1',
+        }
+        return res;
+      }
+      indexPostit == maxlengthPostitTab  ? indexPostit = 1 : indexPostit = indexPostit + 1;
+      const res = {
+        ...state,
+        currentPostit : indexPostit.toString(),
+      }
+      console.log(res)
+      return res;
+    }
+    case PREVIOUS_POSTIT: {
+      const indexElem = state.boards.findIndex((e)=>e.id === action.payload.id)
+      console.log(indexElem)
+      const maxlengthPostitTab = state.boards[indexElem].postits.length;
+      let indexPostit = parseInt(action.payload.idPostit)
+      if(maxlengthPostitTab==0){
+        const res = {
+          ...state,
+          currentPostit : '1',
+        }
+        return res;
+      }
+      indexPostit ==  1   ? indexPostit = maxlengthPostitTab : indexPostit = indexPostit - 1;
+      const res = {
+        ...state,
+        currentPostit : indexPostit.toString(),
       }
       console.log(res)
       return res;
