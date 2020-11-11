@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {
   DELETE_POSTIT, CREATE_BOARD, DELETE_BOARD, CREATE_POSTIT, NEXT_BOARD, PREVIOUS_BOARD, SET_INDEX,
-  PREVIOUS_POSTIT, NEXT_POSTIT
+  PREVIOUS_POSTIT, NEXT_POSTIT , ADD_DRAW_POINTS ,RESET_DRAW_POINTS,
 } from '../actions/index';
 /* eslint-disable no-unreachable */
 /* eslint-disable consistent-return */
@@ -24,6 +24,11 @@ const initialState = {
           text: 'Le TP porte sur des rappels de developpement Web',
           visible: false,
           color: '#CCC',
+          drawing: {
+            clickX: [],
+            clickY: [],
+            clickDrag: []
+          },
         },
         {
           type: 'postit',
@@ -32,6 +37,11 @@ const initialState = {
           text: "Le TP porte sur la creation d'un outil de presentation HTML",
           visible: true,
           color: '#00E',
+          drawing: {
+            clickX: [],
+            clickY: [],
+            clickDrag: []
+          },
         },
         {
           type: 'postit',
@@ -40,6 +50,11 @@ const initialState = {
           text: 'Le TP 3',
           visible: true,
           color: '#00E',
+          drawing: {
+            clickX: [],
+            clickY: [],
+            clickDrag: []
+          },
         },
         {
           type: 'postit',
@@ -48,6 +63,11 @@ const initialState = {
           text: 'Le TP 4',
           visible: true,
           color: '#0E0',
+          drawing: {
+            clickX: [],
+            clickY: [],
+            clickDrag: []
+          },
         },
       ],
     },
@@ -64,6 +84,11 @@ const initialState = {
         text: 'Le TP 4',
         visible: true,
         color: '#0E0',
+        drawing: {
+          clickX: [],
+          clickY: [],
+          clickDrag: []
+        },
       }],
     },
   ],
@@ -82,6 +107,11 @@ function rootReducer(state = initialState, action) {
         text: action.payload.desc,
         visible: true,
         color: '#0E0',
+        drawing: {
+          clickX: [],
+          clickY: [],
+          clickDrag: []
+        },
       }
       const res = {
         ...state,
@@ -240,6 +270,77 @@ function rootReducer(state = initialState, action) {
         currentPostit : indexPostit.toString(),
       }
       console.log(res)
+      return res;
+    }
+    case ADD_DRAW_POINTS : {
+      console.log(action.payload.x)
+      const indexBoard = state.boards.findIndex((e)=>e.id == action.payload.id)
+      console.log("indexBoard");
+      console.log(indexBoard)
+      console.log(state.boards[indexBoard].postits)
+      console.log(state.boards[indexBoard].postits[indexPostit])
+      const indexPostit = action.payload.idPostit;
+      const res = {
+        ...state,
+        boards : [
+          ...state.boards.slice(0,indexBoard),
+          {
+            ...state.boards[indexBoard],
+            postits : [
+              ...state.boards[indexBoard].postits.slice(0,indexPostit),
+              {
+                ...state.boards[indexBoard].postits[indexPostit],
+                drawing :{
+                  clickX : state.boards[indexBoard].postits[indexPostit].drawing.clickX.concat(action.payload.x),
+                  clickY : state.boards[indexBoard].postits[indexPostit].drawing.clickY.concat(action.payload.y),
+                  clickDrag : state.boards[indexBoard].postits[indexPostit].drawing.clickDrag.concat(action.payload.drag)
+                }
+              },
+              ...state.boards[indexBoard].postits.slice(indexPostit+1)
+            ]
+            
+          },
+          ...state.boards.slice(indexBoard+1)
+        ],
+      }
+      // const res =  {
+      //   ...state,
+      //   drawing : {
+      //     clickX : state.drawing.clickX.concat(action.payload.x),
+      //     clickY : state.drawing.clickY.concat(action.payload.y),
+      //     clickDrag : state.drawing.clickDrag.concat(action.payload.drag)
+      //   }
+      // }
+      console.log(res);
+      return res;
+    }
+    case RESET_DRAW_POINTS : {
+      const indexBoard = state.boards.findIndex((e)=>e.id == action.payload.id)
+      const indexPostit = action.payload.idPostit;
+      const res = {
+        ...state,
+        boards : [
+          ...state.boards.slice(0,indexBoard),
+          {
+            ...state.boards[indexBoard],
+            postits : [
+              ...state.boards[indexBoard].postits.slice(0,indexPostit),
+              {
+                ...state.boards[indexBoard].postits[indexPostit],
+                drawing :{
+                  clickX : [],
+                  clickY : [],
+                  clickDrag : [],
+                }
+              },
+              ...state.boards[indexBoard].postits.slice(indexPostit+1)
+            ]
+            
+          },
+          ...state.boards.slice(indexBoard+1)
+        ],
+      }
+      console.log(res);
       return res;
     }
     default:

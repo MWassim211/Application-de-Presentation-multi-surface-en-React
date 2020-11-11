@@ -7,6 +7,8 @@ export const PREVIOUS_BOARD = 'PREVIOUS_BOARD';
 export const NEXT_POSTIT = 'NEXT_POSTIT';
 export const PREVIOUS_POSTIT = 'PREVIOUS_POSTIT';
 export const SET_INDEX = 'SET_INDEX';
+export const ADD_DRAW_POINTS = 'ADD_DRAW_POINTS';
+export const RESET_DRAW_POINTS = 'RESET_DRAW_POINTS';
 
 export function createBoard(payload, meta) {
   return { type: CREATE_BOARD, payload, meta };
@@ -42,4 +44,12 @@ export function nextPostit(payload, meta) {
 
 export function previousPostit(payload, meta) {
   return { type: PREVIOUS_POSTIT, payload, meta };
+}
+
+export function addDrawPoints(payload, meta) {
+  return { type: ADD_DRAW_POINTS, payload, meta };
+}
+
+export function resetDrawPoints(payload, meta) {
+  return { type: RESET_DRAW_POINTS, payload, meta };
 }

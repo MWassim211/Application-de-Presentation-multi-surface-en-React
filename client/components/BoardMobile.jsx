@@ -145,7 +145,7 @@ function BoardMobile(props) {
       <Grid className={classes.grid} container  spacing={3} justify="flex-start">
         {boards[GetIndexElem()].postits[parseInt(idPostit)-1] ? 
           <Grid item lg={3} xs={12} md={4} key={boards[GetIndexElem()].postits[parseInt(idPostit)-1].title}>
-            <Postit param={boards[GetIndexElem()].postits[parseInt(idPostit)-1]} handleOnDelete={handleDeleteClick}/>
+            <Postit param={boards[GetIndexElem()].postits[parseInt(idPostit)-1]} indexPostit={parseInt(idPostit)-1} handleOnDelete={handleDeleteClick}/>
           </Grid> : 
           <Grid item lg={3} xs={12} md={4} >
           <Card className={classes.addCard}>

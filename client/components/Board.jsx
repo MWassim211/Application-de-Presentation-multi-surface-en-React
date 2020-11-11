@@ -139,9 +139,9 @@ function Board(props) {
     <div className={classes.root}>
       <Grid className={classes.grid} container  spacing={3} justify="flex-start">
         {console.log(GetIndexElem()),
-        boards[GetIndexElem()].postits.map((element) => (
+        boards[GetIndexElem()].postits.map((element, i) => (
           <Grid item lg={3} xs={12} md={4} key={element.title}>
-            <Postit param={element} handleOnDelete={handleDeleteClick}/>
+            <Postit param={element} indexPostit={i} handleOnDelete={handleDeleteClick}/>
           </Grid>
         ))}
         <Grid item lg={3} xs={12} md={4} >

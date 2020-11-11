@@ -2,10 +2,11 @@
 /* eslint-disable no-undef */
 import { Create } from '@material-ui/icons';
 import io from 'socket.io-client';
-import { CREATE_POSTIT, SET_INDEX , NEXT_BOARD , PREVIOUS_BOARD , DELETE_POSTIT , DELETE_BOARD , CREATE_BOARD} from '../actions/index';
+import { CREATE_POSTIT, SET_INDEX , NEXT_BOARD , PREVIOUS_BOARD , DELETE_POSTIT ,
+   DELETE_BOARD ,ADD_DRAW_POINTS, CREATE_BOARD, RESET_DRAW_POINTS} from '../actions/index';
 // eslint-disable-next-line import/named
 // eslint-disable-next-line import/no-cycle
-import { setIndex, createPostit, createBoard , deletePostit, deleteBoard, nextBoard , previousBoard } from '../actions/index';
+import { setIndex, createPostit, createBoard , deletePostit, deleteBoard, nextBoard , previousBoard ,addDrawPoints, resetDrawPoints } from '../actions/index';
 import store from '../store/index';
 
 
@@ -40,6 +41,13 @@ socket.on('action_response', (msg) => {
     case CREATE_BOARD : 
       store.dispatch(createBoard(msg.payload,{ propagate : false}))
       break;
+    case ADD_DRAW_POINTS : 
+      store.dispatch(addDrawPoints(msg.payload,{ propagate : false}))
+      break;
+    case RESET_DRAW_POINTS : 
+      store.dispatch(resetDrawPoints(msg.payload,{ propagate : false}))
+      break;
+
 
     
     
@@ -84,6 +92,14 @@ function propagateSocket(store) {
         if (action.type === CREATE_BOARD) {
           // socket.emit('action', { type: CREATE_POSTIT, payload : {desc : action.payload.desc, title : action.payload.title , idBoard : action.payload.idBoard} });
           socket.emit('action', { type: CREATE_BOARD, payload : action.payload });
+        }
+        if (action.type === ADD_DRAW_POINTS) {
+          // socket.emit('action', { type: CREATE_POSTIT, payload : {desc : action.payload.desc, title : action.payload.title , idBoard : action.payload.idBoard} });
+          socket.emit('action', { type: ADD_DRAW_POINTS, payload : action.payload });
+        }
+        if (action.type === RESET_DRAW_POINTS) {
+          // socket.emit('action', { type: CREATE_POSTIT, payload : {desc : action.payload.desc, title : action.payload.title , idBoard : action.payload.idBoard} });
+          socket.emit('action', { type: RESET_DRAW_POINTS, payload : action.payload });
         }
 
         
