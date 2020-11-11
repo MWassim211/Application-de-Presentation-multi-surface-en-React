@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useLocation, withRouter } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import Drawer from './Drawer';
 import FormPostitDialog from './FormPostitDialog';
 
@@ -100,6 +101,11 @@ function AppToolbar(props) {
     props.previousBoard(true);
   };
 
+  const handleFullscreenClick = () => {
+    const elem = document.getElementById('appFS');
+    elem.requestFullscreen();
+  };
+
   return (
     <div>
       <AppBar position="static">
@@ -121,6 +127,9 @@ function AppToolbar(props) {
           </IconButton>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnNextClick}>
             <NavigateNextIcon />
+          </IconButton>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleFullscreenClick}>
+            <FullscreenIcon />
           </IconButton>
           <Fab onClick={handleClickOpen} color="secondary" aria-label="add">
             <AddIcon />

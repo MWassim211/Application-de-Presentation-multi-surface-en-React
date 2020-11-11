@@ -91,7 +91,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className="app">
+        <div id="appFS" className="app">
           <AppToolbar boardNameDisplay={boardDisplay}/>
           {console.log(isMobile+"hallo")}
           {/* <Switch>
