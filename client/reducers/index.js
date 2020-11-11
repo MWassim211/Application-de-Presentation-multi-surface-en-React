@@ -167,6 +167,7 @@ function rootReducer(state = initialState, action) {
       }
       const res =  {
         ...state,
+        index : index,
         boards : [
           ...state.boards,
           newBoard,
@@ -178,10 +179,16 @@ function rootReducer(state = initialState, action) {
       
     case DELETE_BOARD:{
       const indexElem = state.boards.findIndex((e)=>e.id == action.payload.id)
-      // const index = parseInt(action.payload.id)-1;
+      const boardslength = state.boards.length;
+      let pointe;
+      if (boardslength -1 > indexElem)
+        pointe = indexElem + 2;
+      else
+        pointe = 1;
+      // state.boards.length > 0 ? pointe = parseInt(state.boards[0].id) : pointe = 1
       const res = {
         ...state,
-        index : parseInt(state.boards[0].id),
+        index : pointe,
         boards : [
           ...state.boards.slice(0,indexElem),
           ...state.boards.slice(indexElem+1)
@@ -197,7 +204,9 @@ function rootReducer(state = initialState, action) {
       console.log(maxBoards)
       let next;
       const currentBoardIndex = state.boards.findIndex(e=>e.id == state.index.toString());
-      (currentBoardIndex == -1 || currentBoardIndex == maxBoards - 1 ) ? next = 0 : next = currentBoardIndex +1;
+      if(currentBoardIndex == -1 )
+        return state;
+      ( currentBoardIndex == maxBoards - 1 ) ? next = 0 : next = currentBoardIndex +1;
       const res = {
         ...state,
         index : parseInt(state.boards[next].id),
@@ -211,7 +220,9 @@ function rootReducer(state = initialState, action) {
       console.log(maxBoards)
       let next;
       const currentBoardIndex = state.boards.findIndex(e=>e.id == state.index.toString());
-      (currentBoardIndex == -1 || currentBoardIndex == 0 ) ? next = maxBoards - 1 : next = currentBoardIndex - 1;
+      if(currentBoardIndex == -1 )
+        return state;
+      ( currentBoardIndex == 0 ) ? next = maxBoards - 1 : next = currentBoardIndex - 1;
       const res = {
         ...state,
         index : parseInt(state.boards[next].id),

@@ -128,8 +128,8 @@ function Board(props) {
   }
 
   const GetIndexElem = () => {
-     if (boards.findIndex((e)=> e.id == id) == -1) {
-      return 0;
+     if (boards.findIndex((e)=> e.id == id) == -1 || boards.length==0) {
+      return -1;
     }else {
       return boards.findIndex((e)=> e.id == id) ;
     }
@@ -137,7 +137,7 @@ function Board(props) {
 
   return (
     <div className={classes.root}>
-      <Grid className={classes.grid} container  spacing={3} justify="flex-start">
+      {GetIndexElem() != -1 ? <Grid className={classes.grid} container  spacing={3} justify="flex-start">
         {console.log(GetIndexElem()),
         boards[GetIndexElem()].postits.map((element, i) => (
           <Grid item lg={3} xs={12} md={4} key={element.title}>
@@ -159,7 +159,9 @@ function Board(props) {
               </CardActions>
           </Card>
           </Grid>
-      </Grid>
+      </Grid> : 
+      <h2>hello world</h2>
+      }
           <FormPostitDialog
             open={postitFormState}
             action='Create Postit'
