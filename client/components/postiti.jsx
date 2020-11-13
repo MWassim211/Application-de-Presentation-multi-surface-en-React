@@ -85,6 +85,11 @@ function postit(props) {
      redraw()
   },[clickX])
 
+  useEffect(() => {
+    document.body.addEventListener('touchmove', (evt) => evt.preventDefault(), { passive: false });
+    return () => document.body.removeEventListener('touchmove', (evt) => evt.preventDefault());
+  }, []);
+
 
   const options = {
     score: 80, // The similarity threshold to apply the callback(s)
@@ -285,6 +290,7 @@ function postit(props) {
           ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
           ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
         );
+        console.log(gesturePoints)
       break;
       case "mouse": 
         addClick(
@@ -320,6 +326,7 @@ function postit(props) {
             ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
             ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
           );
+          console.log(gesturePoints)
         break;
         case "mouse": 
           addClick(
@@ -387,9 +394,6 @@ function postit(props) {
               onPointerDown={pointerDownHandler}
               onPointerMove={pointerMoveHandler}
               onPointerUp={pointerUpEvent}
-              onTouchStart={pointerDownHandler}
-              onTouchMove={pointerMoveHandler}
-              onTouchEnd={pointerUpEvent}
             ></canvas>
           </Box>
         </CardContent>
