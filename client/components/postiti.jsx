@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 import {useParams} from 'react-router-dom';
-import { addDrawPoints ,resetDrawPoints, nextBoard, previousBoard, setIndex } from '../actions/index';
+import { addDrawPoints ,resetDrawPoints, nextBoard, previousBoard, setIndex,nextPostit , previousPostit} from '../actions/index';
 import RestoreIcon from '@material-ui/icons/Restore';
 import OneDollar from '../OneDollar';
 
@@ -43,6 +43,7 @@ const useStyles = makeStyles({
 const mapStateToProps = (state) => {
   return {
     // drawing: state.drawing,
+    currentPostit : state.currentPostit,
     
   };
 };
@@ -54,13 +55,17 @@ const mapDispatchProps = (dispatch) => {
     nextBoard: (flag) => dispatch(nextBoard({}, { propagate: flag })),
     previousBoard: (flag) => dispatch(previousBoard({}, { propagate: flag })),
     setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
+    nextPostit: (id, idPostit, flag) => dispatch(nextPostit({ id, idPostit }, { propagate: flag })),
+    prevPostit: (id, idPostit, flag) => dispatch(previousPostit({ id, idPostit },
+    { propagate: flag })),
+
   };
 };
 
 
 function postit(props) {
   const classes = useStyles();
-  const { param, handleOnDelete ,indexPostit} = props;
+  const { param, handleOnDelete ,indexPostit, currentPostit} = props;
   const {id} = useParams();
   // const {clickX,clickY,clickDrag} = props.drawing;
   const {drawing} = param;
@@ -77,8 +82,6 @@ function postit(props) {
   }
 
   useEffect(()=>{
-    console.log(clickX)
-    console.log('hihihi')
      redraw()
   },[clickX])
 
@@ -207,6 +210,10 @@ function postit(props) {
 
   function addClick(x, y, dragging) {
     clickX.push(x), clickY.push(y), clickDrag.push(dragging);
+    // gesturePoints.push([x,y])
+  }
+
+  function addGesture(x,y){
     gesturePoints.push([x,y])
   }
 
@@ -238,7 +245,6 @@ function postit(props) {
     }
 
     gesture = recognizer.check(gesturePoints);
-    console.log(gesture)
     if (gesture.recognized) {
       context.strokeStyle = '#666';
       context.lineJoin = 'round';
@@ -264,53 +270,102 @@ function postit(props) {
     var mouseX = (ev.pageX - refCanvas.current.offsetLeft) / width;
     var mouseY = (ev.pageY - refCanvas.current.offsetTop) / height;
     const { top, left } = refCanvas.current.getBoundingClientRect();
-  
     paint = true;
-    // addClick(mouseX, mouseY, false);
-    addClick(
-      ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-      ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-      false,
-    );
-    console.log(clickX);
-    // props.addPoints(clickX,clickY,clickDrag)
+
+    switch (ev.pointerType){
+      case "pen":
+        addClick(
+          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+          false,
+        );
+      break;
+      case "touch":
+        addGesture(
+          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+        );
+      break;
+      case "mouse": 
+        addClick(
+          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+          false,
+        );
+      break;
+    }
+
+    // addClick(
+    //   ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+    //   ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+    //   false,
+    // );
+    
     redraw();
   }
   
   function pointerMoveHandler(ev) {
     if (paint) {
       const { width, height, top, left } = refCanvas.current.getBoundingClientRect();
-      addClick(
-        ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-        ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-        true,
-      );
-      // console.log(clickX);
+      switch (ev.pointerType){
+        case "pen":
+          addClick(
+            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+            true,
+          );
+        break;
+        case "touch":
+          addGesture(
+            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+          );
+        break;
+        case "mouse": 
+          addClick(
+            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+            true,
+          );
+        break;
+      }
       redraw();
     }
   }
   
   function pointerUpEvent(ev) {
-    props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
-    if(gesture.recognized)
-    {switch (gesture.name){
-      case "triangle" : {
-        props.nextBoard(true);
-      }
+    switch (ev.pointerType){
+      case "pen":
+        props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
       break;
-      case "circle" : {
-        props.previousBoard(true);
-      }
+      case "touch":
+        if(gesture.recognized)
+          {switch (gesture.name){
+            case "triangle" : {
+              props.nextBoard(true);
+            }
+            break;
+            case "circle" : {
+              props.previousBoard(true);
+            }
+            break;
+            case "suivant" : {
+              props.nextPostit(id,currentPostit,false)
+            }
+            break;
+            case "precedent" : {
+              props.prevPostit(id,currentPostit,false)
+            }
+            break;
+          }} 
       break;
-      case "suivant" : {
-        props.nextBoard(true);
-      }
+      case "mouse": 
+        props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
       break;
-      case "precedent" : {
-        props.previousBoard(true);
-      }
-      break;
-    }} 
+    }
+
+    // props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
+    
     paint = false;
   }
 

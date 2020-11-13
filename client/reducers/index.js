@@ -92,6 +92,7 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action) {
+  console.log(action);
   switch (action.type) {
     case CREATE_POSTIT: {
       const indexBoard = state.boards.findIndex((e) => e.id === action.payload.idBoard.toString());

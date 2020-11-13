@@ -108,7 +108,6 @@ function BoardMobile(props) {
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
-    console.log(uri.slice(1));
     props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), true);
     setpostitDesc('');
     setpostitTitle('');

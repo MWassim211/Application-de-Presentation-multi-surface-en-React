@@ -54,8 +54,6 @@ function AppToolbar(props) {
   const [boardsTitle, setboardsTitle] = useState('');
 
   useEffect(() => {
-    console.log('use effect hook called');
-    console.log(index);
     props.history.push(`/${index}`);
   }, [index]);
 

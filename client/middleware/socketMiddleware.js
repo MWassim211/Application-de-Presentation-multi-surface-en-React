@@ -58,11 +58,7 @@ function propagateSocket() {
 
       if (action.meta.propagate === true) {
         if (action.type === SET_INDEX) {
-          console.log('hkemtha je vais emit');
-          console.log(store.getState().index);
-          console.log(`verifyib store ${store.getState().index}`);
           socket.emit('action', { type: SET_INDEX, payload: { index: store.getState().index } });
-          console.log('rahet');
         }
         if (action.type === CREATE_POSTIT) {
           socket.emit('action', { type: CREATE_POSTIT, payload: action.payload });
