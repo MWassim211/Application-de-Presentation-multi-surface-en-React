@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { useLocation, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
@@ -54,7 +52,6 @@ function AppToolbar(props) {
   const [postitFormState, setPostitFormState] = useState(false);
   const [boardName, setBoardName] = useState('');
   const [boardsTitle, setboardsTitle] = useState('');
-  const location = useLocation();
 
   useEffect(() => {
     console.log('use effect hook called');
@@ -152,7 +149,14 @@ function AppToolbar(props) {
 AppToolbar.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
   boardNameDisplay: PropTypes.string.isRequired,
-
+  index: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  setIndex: PropTypes.func.isRequired,
+  createBoard: PropTypes.func.isRequired,
+  previousBoard: PropTypes.func.isRequired,
+  nextBoard: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppToolbar));

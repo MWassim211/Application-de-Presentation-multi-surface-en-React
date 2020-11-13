@@ -24,11 +24,12 @@ app.get('/api', (req, res) => {
 app.get('/', (req, res) => {
   res.status(200).send('Hello World!');
 });
-// eslint-disable-next-line no-unused-vars
+
 io.on('connection', (socket) => {
   console.log('a user connected');
-  socket.on('action', (msg) => { console.log('je vais la dispatche aux client'); socket.broadcast.emit('action_response', msg); });
+  socket.on('action', (msg) => { socket.broadcast.emit('action_response', msg); });
 });
+
 http.listen(port, () => {
   console.log(`App listening on port: ${port}`);
 });

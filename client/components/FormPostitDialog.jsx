@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+/* eslint-disable */
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -132,20 +131,20 @@ FormPostitDialog.propType = {
   onPostitFormClose: PropTypes.func,
 };
 FormPostitDialog.defaultProps = {
-  handleBNotesOnChange: null,
-  handlePTitleOnChange: null,
-  handleVisibleOnChange: null,
-  handleColorOnChange: null,
-  handlePdescOnchange: null,
-  handleBNameOnChange: null,
-  postitVisible: '',
-  postitColor: '',
-  onPostitFormClose: null,
-  onFormClose: null,
-  boardName: null,
-  boardsTitle: null,
-  postitDesc: null,
-  postitTitle: null,
+  // handleBNotesOnChange: null,
+  // handlePTitleOnChange: null,
+  // handleVisibleOnChange: null,
+  // handleColorOnChange: null,
+  // handlePdescOnchange: null,
+  // handleBNameOnChange: null,
+  // postitVisible: '',
+  // postitColor: '',
+  // onPostitFormClose: null,
+  // onFormClose: null,
+  // boardName: null,
+  // boardsTitle: null,
+  // postitDesc: null,
+  // postitTitle: null,
 };
 
 export default FormPostitDialog;
