@@ -102,8 +102,7 @@ function AppToolbar(props) {
   };
 
   const handleFullscreenClick = () => {
-    const elem = document.getElementById('appFS');
-    elem.requestFullscreen();
+    document.documentElement.requestFullscreen();
   };
 
   return (

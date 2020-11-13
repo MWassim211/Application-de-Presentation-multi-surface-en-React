@@ -11,7 +11,7 @@ import store from '../store/index';
 
 
 
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect();
 
 socket.on('action_response', (msg) => {
   console.log('action_response', msg);

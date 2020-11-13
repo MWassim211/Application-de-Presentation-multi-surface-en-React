@@ -210,6 +210,7 @@ function postit(props) {
     gesturePoints.push([x,y])
   }
 
+  let gesture;
   function redraw() {
     let context = refCanvas.current.getContext("2d");
     let width = refCanvas.current.getBoundingClientRect().width;
@@ -236,8 +237,7 @@ function postit(props) {
       context.stroke();
     }
 
-    let gesture = recognizer.check(gesturePoints);
-    console.log("gesture")
+    gesture = recognizer.check(gesturePoints);
     console.log(gesture)
     if (gesture.recognized) {
       context.strokeStyle = '#666';
@@ -249,24 +249,7 @@ function postit(props) {
       for (let i = 1; i < gesturePoints.length; i += 1) {
         context.lineTo(gesturePoints[i][0] * width - 1, gesturePoints[i][1] * height);
       }
-      switch (gesture.name){
-        case "triangle" : {
-          props.nextBoard(true);
-        }
-        break;
-        case "circle" : {
-          props.previousBoard(true);
-        }
-        break;
-        case "suivant" : {
-          console.log("gebthaaa")
-          props.nextBoard(true);
-        }
-        case "precedent" : {
-          console.log("gebthaaa")
-          props.previousBoard(true);
-        }
-      } 
+      
       context.stroke();
     }
   }
@@ -280,9 +263,15 @@ function postit(props) {
     let height = refCanvas.current.getBoundingClientRect().height;
     var mouseX = (ev.pageX - refCanvas.current.offsetLeft) / width;
     var mouseY = (ev.pageY - refCanvas.current.offsetTop) / height;
+    const { top, left } = refCanvas.current.getBoundingClientRect();
   
     paint = true;
-    addClick(mouseX, mouseY, false);
+    // addClick(mouseX, mouseY, false);
+    addClick(
+      ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+      ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+      false,
+    );
     console.log(clickX);
     // props.addPoints(clickX,clickY,clickDrag)
     redraw();
@@ -290,12 +279,11 @@ function postit(props) {
   
   function pointerMoveHandler(ev) {
     if (paint) {
-      let width = refCanvas.current.getBoundingClientRect().width;
-      let height = refCanvas.current.getBoundingClientRect().height;
+      const { width, height, top, left } = refCanvas.current.getBoundingClientRect();
       addClick(
-        (ev.pageX - refCanvas.current.offsetLeft) / width,
-        (ev.pageY - refCanvas.current.offsetTop) / height,
-        true
+        ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+        ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+        true,
       );
       // console.log(clickX);
       redraw();
@@ -303,9 +291,26 @@ function postit(props) {
   }
   
   function pointerUpEvent(ev) {
-    console.log("checker hna")
-    console.log("[[" + gesturePoints.join("],[") + "]]");
     props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
+    if(gesture.recognized)
+    {switch (gesture.name){
+      case "triangle" : {
+        props.nextBoard(true);
+      }
+      break;
+      case "circle" : {
+        props.previousBoard(true);
+      }
+      break;
+      case "suivant" : {
+        props.nextBoard(true);
+      }
+      break;
+      case "precedent" : {
+        props.previousBoard(true);
+      }
+      break;
+    }} 
     paint = false;
   }
 
@@ -327,6 +332,9 @@ function postit(props) {
               onPointerDown={pointerDownHandler}
               onPointerMove={pointerMoveHandler}
               onPointerUp={pointerUpEvent}
+              onTouchStart={pointerDownHandler}
+              onTouchMove={pointerMoveHandler}
+              onTouchEnd={pointerUpEvent}
             ></canvas>
           </Box>
         </CardContent>
