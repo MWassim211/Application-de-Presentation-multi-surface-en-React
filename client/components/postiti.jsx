@@ -365,6 +365,7 @@ function postit(props) {
             }
             break;
           }} 
+          gesturePoints = []
       break;
       case "mouse": 
         props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
