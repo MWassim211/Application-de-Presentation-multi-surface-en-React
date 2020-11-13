@@ -16,16 +16,12 @@ import store from '../store/index';
 const socket = io.connect();
 
 socket.on('action_response', (msg) => {
-  console.log('action_response', msg);
   // eslint-disable-next-line default-case
   switch (msg.type) {
     case SET_INDEX:
-      console.log('teste');
       store.dispatch(setIndex({ index: msg.payload.index.toString() }, { propagate: false }));
       break;
     case CREATE_POSTIT:
-      console.log('hnnnnnnnnnnnna');
-      console.log(msg.payload);
       store.dispatch(createPostit(msg.payload, { propagate: false }));
       break;
     case NEXT_BOARD:
@@ -48,6 +44,8 @@ socket.on('action_response', (msg) => {
       break;
     case RESET_DRAW_POINTS:
       store.dispatch(resetDrawPoints(msg.payload, { propagate: false }));
+      break;
+    default:
       break;
   }
 });

@@ -92,11 +92,9 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action) {
-  console.log(action);
   switch (action.type) {
     case CREATE_POSTIT: {
-      // const indexBoard = action.payload.idBoard - 1
-      const indexBoard = state.boards.findIndex((e) => e.id === action.payload.idBoard);
+      const indexBoard = state.boards.findIndex((e) => e.id === action.payload.idBoard.toString());
       const newpostit = {
         type: 'postit',
         board: action.payload.idBoard.toString(),
@@ -124,7 +122,6 @@ function rootReducer(state = initialState, action) {
           ...state.boards.slice(indexBoard + 1),
         ],
       };
-      console.log(res);
       return res;
     }
 
@@ -144,7 +141,6 @@ function rootReducer(state = initialState, action) {
           ...state.boards.slice(indexBoard + 1),
         ],
       };
-      console.log(res);
       return res;
     }
     case CREATE_BOARD: {
@@ -171,7 +167,6 @@ function rootReducer(state = initialState, action) {
           newBoard,
         ],
       };
-      console.log(res);
       return res;
     }
 
@@ -189,14 +184,11 @@ function rootReducer(state = initialState, action) {
           ...state.boards.slice(indexElem + 1),
         ],
       };
-      console.log(res);
       return res;
     }
 
     case NEXT_BOARD: {
-      console.log(action);
       const maxBoards = state.boards.length;
-      console.log(maxBoards);
       let next;
       const currentBoardIndex = state.boards.findIndex((e) => e.id === state.index.toString());
       if (currentBoardIndex === -1) { return state; }
@@ -205,13 +197,10 @@ function rootReducer(state = initialState, action) {
         ...state,
         index: parseInt(state.boards[next].id, 10),
       };
-      console.log(res);
       return res;
     }
     case PREVIOUS_BOARD: {
-      console.log(action);
       const maxBoards = state.boards.length;
-      console.log(maxBoards);
       let next;
       const currentBoardIndex = state.boards.findIndex((e) => e.id === state.index.toString());
       if (currentBoardIndex === -1) { return state; }
@@ -220,11 +209,9 @@ function rootReducer(state = initialState, action) {
         ...state,
         index: parseInt(state.boards[next].id, 10),
       };
-      console.log(res);
       return res;
     }
     case SET_INDEX: {
-      console.log(action);
       const indexElem = state.boards.findIndex((e) => e.id === action.payload.index);
       if (indexElem === -1) { return state; }
       const res = {
@@ -232,12 +219,10 @@ function rootReducer(state = initialState, action) {
         // index : indexElem + 1,
         index: parseInt(state.boards[indexElem].id, 10),
       };
-      console.log(res);
       return res;
     }
     case NEXT_POSTIT: {
       const indexElem = state.boards.findIndex((e) => e.id === action.payload.id);
-      console.log(indexElem);
       const maxlengthPostitTab = state.boards[indexElem].postits.length;
       let indexPostit = parseInt(action.payload.idPostit, 10);
       if (maxlengthPostitTab === 0) {
@@ -252,12 +237,10 @@ function rootReducer(state = initialState, action) {
         ...state,
         currentPostit: indexPostit.toString(),
       };
-      console.log(res);
       return res;
     }
     case PREVIOUS_POSTIT: {
       const indexElem = state.boards.findIndex((e) => e.id === action.payload.id);
-      console.log(indexElem);
       const maxlengthPostitTab = state.boards[indexElem].postits.length;
       let indexPostit = parseInt(action.payload.idPostit, 10);
       if (maxlengthPostitTab === 0) {
@@ -272,7 +255,6 @@ function rootReducer(state = initialState, action) {
         ...state,
         currentPostit: indexPostit.toString(),
       };
-      console.log(res);
       return res;
     }
     case ADD_DRAW_POINTS: {
@@ -304,7 +286,6 @@ function rootReducer(state = initialState, action) {
           ...state.boards.slice(indexBoard + 1),
         ],
       };
-      console.log(res);
       return res;
     }
     case RESET_DRAW_POINTS: {
@@ -333,7 +314,6 @@ function rootReducer(state = initialState, action) {
           ...state.boards.slice(indexBoard + 1),
         ],
       };
-      console.log(res);
       return res;
     }
     default:

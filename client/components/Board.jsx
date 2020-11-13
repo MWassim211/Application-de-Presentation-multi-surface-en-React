@@ -11,6 +11,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   deleteBoard, deletePostit, createPostit, setIndex,
 } from '../actions/index';
@@ -56,10 +57,7 @@ function Board(props) {
   const { boards, index, onBoardChange } = props;
   const { id } = useParams();
   useEffect(() => {
-    console.log(index.toString());
     const elem = boards.findIndex((e) => e.id === id);
-
-    console.log(elem);
     if (elem === -1) {
       props.history.push(`/${index}`);
     } else {
@@ -98,7 +96,6 @@ function Board(props) {
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
-    console.log(uri.slice(1));
     props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), true);
     setpostitDesc('');
     setpostitTitle('');
@@ -150,7 +147,7 @@ function Board(props) {
           </Grid>
         </Grid>
       )
-        : <h2>hello world</h2>}
+        : <div style={{ justifyContent: 'center' }}><h2>Aucun board trouvé,pour en créer un,cliquez sur le button plus en haut à droite</h2></div>}
       <FormPostitDialog
         open={postitFormState}
         action="Create Postit"
@@ -164,7 +161,15 @@ function Board(props) {
         handleColorOnChange={handleColorOnChange}
         handleVisibleOnChange={handleVosibleOnChange}
       />
-      <Button variant="contained" onClick={() => handleDeleteBoardClick(id)}>Delete Board</Button>
+      <Button
+        size="small"
+        variant="contained"
+        color="secondary"
+        onClick={() => handleDeleteBoardClick(id)}
+      >
+        Delete Board
+        <DeleteIcon />
+      </Button>
     </div>
   );
 }

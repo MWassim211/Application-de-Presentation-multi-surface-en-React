@@ -133,8 +133,8 @@ function BoardMobile(props) {
     props.prevPostit(idB, idPostitp, false);
   };
   const GetIndexElem = () => {
-    if (boards.findIndex((e) => e.id === id) === -1) {
-      return 0;
+    if (boards.findIndex((e) => e.id === id) === -1 || boards.length === 0) {
+      return -1;
     }
     return boards.findIndex((e) => e.id === id);
   };
@@ -195,7 +195,7 @@ function BoardMobile(props) {
           )}
         </Grid>
       )
-        : <h2>hello world</h2>}
+        : <div style={{ justifyContent: 'center' }}><h2>Aucun board trouvé,pour en créer un,cliquez sur le button plus en haut à droite</h2></div>}
       <MobileToolbar postitNext={handlePostitNext} postitPrevious={handlePostitPrevious} />
       <FormPostitDialog
         open={postitFormState}
