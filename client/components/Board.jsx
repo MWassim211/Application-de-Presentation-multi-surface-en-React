@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 function Board(props) {
   const classes = useStyles();
-  const { boards, index, onBoardChange } = props;
+  const { boards, index } = props;
   const { id } = useParams();
   useEffect(() => {
     const elem = boards.findIndex((e) => e.id === id);
@@ -62,7 +62,6 @@ function Board(props) {
       props.history.push(`/${index}`);
     } else {
       props.setIndex(id, true);
-      onBoardChange(boards[elem].title);
     }
   }, [id]);
 
@@ -167,7 +166,6 @@ function Board(props) {
 Board.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
   index: PropTypes.number,
-  onBoardChange: PropTypes.func.isRequired,
   setIndex: PropTypes.func.isRequired,
   createPostit: PropTypes.func.isRequired,
   deletePositit: PropTypes.func.isRequired,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { isMobile } from 'react-device-detect';
 import {
@@ -14,25 +14,20 @@ import BoardMobile from './components/BoardMobile';
 import store from './store/index';
 
 function App() {
-  const [boardDisplay, setBoardDisplay] = useState('');
-  const handleOnBoardChange = (name) => {
-    setBoardDisplay(name);
-  };
-
   return (
     <Provider store={store}>
       <Router>
         <div className="app">
-          <AppToolbar boardNameDisplay={boardDisplay} />
+          <AppToolbar />
 
           <Switch>
             { isMobile && <Redirect exact from="/:id" to="/:id/postit/1" />}
             { !isMobile && <Redirect exact from="/:id/postit/:idPostit" to="/:id" />}
             <Route exact path="/:id">
-              <Board onBoardChange={handleOnBoardChange} />
+              <Board />
             </Route>
             <Route exact path="/:id/postit/:idPostit">
-              <BoardMobile onBoardChange={handleOnBoardChange} />
+              <BoardMobile />
             </Route>
           </Switch>
         </div>

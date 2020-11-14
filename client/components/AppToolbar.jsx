@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch) => ({
 function AppToolbar(props) {
   const classes = useStyles();
   // eslint-disable-next-line no-unused-vars
-  const { boards, index, boardNameDisplay } = props;
+  const { boards, index } = props;
   const [state, setState] = useState(false);
   const [fullScreen, setfullScreen] = useState(false);
   const [postitFormState, setPostitFormState] = useState(false);
@@ -183,7 +183,6 @@ function AppToolbar(props) {
 
 AppToolbar.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
-  boardNameDisplay: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,

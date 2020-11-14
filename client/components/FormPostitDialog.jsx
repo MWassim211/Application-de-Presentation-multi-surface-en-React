@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -10,8 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 
 function FormPostitDialog(props) {
-  // eslint-disable-next-line react/prop-types
-  const { open, onFormClose,onCloseNoAction } = props;
+  const { open, onFormClose, onCloseNoAction } = props;
   const {
     boardName, boardsTitle, postitDesc, postitTitle, action, postitVisible, postitColor,
     onPostitFormClose,
@@ -49,7 +48,7 @@ function FormPostitDialog(props) {
               />
             </DialogContent>
             <DialogActions>
-            <Button onClick={onCloseNoAction} color="primary">
+              <Button onClick={onCloseNoAction} color="primary">
                 Annuler
               </Button>
               <Button onClick={onFormClose} color="primary">
@@ -95,7 +94,7 @@ function FormPostitDialog(props) {
                 <TextField
                   margin="dense"
                   id="postitvisible"
-                  label="Visible"
+                  label="Color"
                   type="text"
                   value={postitColor}
                   onChange={(e) => handleColorOnChange(e)}
@@ -104,7 +103,7 @@ function FormPostitDialog(props) {
 
               </DialogContent>
               <DialogActions>
-              <Button onClick={onCloseNoAction} color="primary">
+                <Button onClick={onCloseNoAction} color="primary">
                   Annuler
                 </Button>
                 <Button onClick={onPostitFormClose} color="primary">
@@ -138,20 +137,20 @@ FormPostitDialog.propType = {
   onCloseNoAction: PropTypes.func,
 };
 FormPostitDialog.defaultProps = {
-  // handleBNotesOnChange: null,
-  // handlePTitleOnChange: null,
-  // handleVisibleOnChange: null,
-  // handleColorOnChange: null,
-  // handlePdescOnchange: null,
-  // handleBNameOnChange: null,
-  // postitVisible: '',
-  // postitColor: '',
-  // onPostitFormClose: null,
-  // onFormClose: null,
-  // boardName: null,
-  // boardsTitle: null,
-  // postitDesc: null,
-  // postitTitle: null,
+  handleBNotesOnChange: null,
+  handlePTitleOnChange: null,
+  handleVisibleOnChange: null,
+  handleColorOnChange: null,
+  handlePdescOnchange: null,
+  handleBNameOnChange: null,
+  postitVisible: '',
+  postitColor: '',
+  onPostitFormClose: null,
+  onFormClose: null,
+  boardName: null,
+  boardsTitle: null,
+  postitDesc: null,
+  postitTitle: null,
 };
 
 export default FormPostitDialog;

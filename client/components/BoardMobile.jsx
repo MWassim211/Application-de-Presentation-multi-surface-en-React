@@ -58,7 +58,7 @@ function BoardMobile(props) {
   const classes = useStyles();
   // eslint-disable-next-line no-unused-vars
   const {
-    boards, index, onBoardChange, currentPostit,
+    boards, index, currentPostit,
   } = props;
   // const { id } = props.match.params;
   const { id, idPostit } = useParams();
@@ -68,7 +68,6 @@ function BoardMobile(props) {
       props.history.push(`/${index}`);
     } else {
       props.setIndex(id, true);
-      onBoardChange(boards[elem].title);
     }
   }, [id]);
 
@@ -214,7 +213,6 @@ function BoardMobile(props) {
 BoardMobile.propTypes = {
   boards: PropTypes.arrayOf(PropTypes.object).isRequired,
   index: PropTypes.number,
-  onBoardChange: PropTypes.func.isRequired,
   currentPostit: PropTypes.string.isRequired,
   setIndex: PropTypes.func.isRequired,
   createPostit: PropTypes.func.isRequired,
