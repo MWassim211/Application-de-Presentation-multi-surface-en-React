@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Drawer as MUIDrawer, ListItem, List, Button,
+  Drawer as MUIDrawer, ListItem, List, Button, Divider,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
@@ -26,9 +27,13 @@ function Drawer({
       <List>
         {boards.map((element) => (
           <ListItem key={element.id} onClick={() => onLinkClick(element.id)}>
-            <Button>{element.title}</Button>
+            <Button>
+              <ListAltIcon />
+              {element.title}
+            </Button>
           </ListItem>
         ))}
+        <Divider />
       </List>
     </MUIDrawer>
   );

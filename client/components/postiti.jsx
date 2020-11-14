@@ -300,13 +300,6 @@ function postit(props) {
         );
       break;
     }
-
-    // addClick(
-    //   ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-    //   ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-    //   false,
-    // );
-    
     redraw();
   }
   

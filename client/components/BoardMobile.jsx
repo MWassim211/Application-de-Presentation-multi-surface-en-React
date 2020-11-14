@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { useParams, withRouter, useLocation } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
@@ -12,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import {
-  deleteBoard, deletePostit, createPostit, setIndex, nextPostit, previousPostit,
+  deletePostit, createPostit, setIndex, nextPostit, previousPostit,
 } from '../actions/index';
 import Postit from './postiti';
 import FormPostitDialog from './FormPostitDialog';
@@ -49,7 +48,6 @@ const mapDispatchToProps = (dispatch) => ({
     { propagate: flag })),
   createPostit: (desc, title, idBoard, flag) => dispatch(createPostit({ desc, title, idBoard },
     { propagate: flag })),
-  deleteBoard: (idBoard, flag) => dispatch(deleteBoard({ id: idBoard }, { propagate: flag })),
   setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
   nextPostit: (id, idPostit, flag) => dispatch(nextPostit({ id, idPostit }, { propagate: flag })),
   prevPostit: (id, idPostit, flag) => dispatch(previousPostit({ id, idPostit },
@@ -105,6 +103,10 @@ function BoardMobile(props) {
     setVisible(e.target.value);
   };
 
+  const handleNoAction = () => {
+    setPostitFormState(false);
+  };
+
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
@@ -117,11 +119,6 @@ function BoardMobile(props) {
 
   const handleDeleteClick = (idB, title) => {
     props.deletePositit(idB, title, true);
-  };
-
-  const handleDeleteBoardClick = (idB) => {
-    props.deleteBoard(idB, true);
-    // props.history.push('/');
   };
 
   const handlePostitNext = (idB, idPostitn) => {
@@ -200,6 +197,7 @@ function BoardMobile(props) {
         open={postitFormState}
         action="Create Postit"
         onPostitFormClose={handlePostitFormSubmit}
+        onCloseNoAction={handleNoAction}
         postitDesc={postitDesc}
         postitTitle={postitTitle}
         postitVisible={visible}
@@ -209,7 +207,6 @@ function BoardMobile(props) {
         handleColorOnChange={handleColorOnChange}
         handleVisibleOnChange={handleVosibleOnChange}
       />
-      <Button variant="contained" onClick={() => handleDeleteBoardClick(id)}>Delete Board</Button>
     </div>
   );
 }
@@ -222,7 +219,6 @@ BoardMobile.propTypes = {
   setIndex: PropTypes.func.isRequired,
   createPostit: PropTypes.func.isRequired,
   deletePositit: PropTypes.func.isRequired,
-  deleteBoard: PropTypes.func.isRequired,
   nextPostit: PropTypes.func.isRequired,
   prevPostit: PropTypes.func.isRequired,
   history: PropTypes.shape({

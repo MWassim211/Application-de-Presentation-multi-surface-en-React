@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { useParams, withRouter, useLocation } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
@@ -11,9 +10,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
-import DeleteIcon from '@material-ui/icons/Delete';
 import {
-  deleteBoard, deletePostit, createPostit, setIndex,
+  deletePostit, createPostit, setIndex,
 } from '../actions/index';
 import Postit from './postiti';
 import FormPostitDialog from './FormPostitDialog';
@@ -33,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '5%',
 
   },
+  deleteButton: {
+    marginBottom: 100,
+  },
   addCard: {
     height: 150,
   },
@@ -48,7 +49,6 @@ const mapDispatchToProps = (dispatch) => ({
     { propagate: flag })),
   createPostit: (desc, title, idBoard, flag) => dispatch(createPostit({ desc, title, idBoard },
     { propagate: flag })),
-  deleteBoard: (idBoard, flag) => dispatch(deleteBoard({ id: idBoard }, { propagate: flag })),
   setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
 });
 
@@ -93,6 +93,10 @@ function Board(props) {
     setVisible(e.target.value);
   };
 
+  const handleNoAction = () => {
+    setPostitFormState(false);
+  };
+
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
@@ -105,11 +109,6 @@ function Board(props) {
 
   const handleDeleteClick = (idp, title) => {
     props.deletePositit(idp, title, true);
-  };
-
-  const handleDeleteBoardClick = (idB) => {
-    props.deleteBoard(idB, true);
-    // props.history.push('/');
   };
 
   const GetIndexElem = () => {
@@ -131,12 +130,11 @@ function Board(props) {
           ))
 }
           <Grid item lg={3} xs={12} md={4}>
-            <Card className={classes.addCard}>
+            <Card className={classes.addCard} style={{ backgroundColor: 'lightgray' }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2" style={{ justifyContent: 'center' }}>
-                  Add new postit
+                  <div>Add new postit</div>
                 </Typography>
-
               </CardContent>
               <CardActions style={{ justifyContent: 'center' }}>
                 <Fab className={classes.addPositiBtn} onClick={handleClickOpen} color="secondary" aria-label="add">
@@ -152,6 +150,7 @@ function Board(props) {
         open={postitFormState}
         action="Create Postit"
         onPostitFormClose={handlePostitFormSubmit}
+        onCloseNoAction={handleNoAction}
         postitDesc={postitDesc}
         postitTitle={postitTitle}
         postitVisible={visible}
@@ -161,15 +160,6 @@ function Board(props) {
         handleColorOnChange={handleColorOnChange}
         handleVisibleOnChange={handleVosibleOnChange}
       />
-      <Button
-        size="small"
-        variant="contained"
-        color="secondary"
-        onClick={() => handleDeleteBoardClick(id)}
-      >
-        Delete Board
-        <DeleteIcon />
-      </Button>
     </div>
   );
 }
@@ -181,7 +171,6 @@ Board.propTypes = {
   setIndex: PropTypes.func.isRequired,
   createPostit: PropTypes.func.isRequired,
   deletePositit: PropTypes.func.isRequired,
-  deleteBoard: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,

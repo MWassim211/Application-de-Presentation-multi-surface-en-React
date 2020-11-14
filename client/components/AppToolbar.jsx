@@ -13,11 +13,13 @@ import { withRouter } from 'react-router-dom';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import Drawer from './Drawer';
 import FormPostitDialog from './FormPostitDialog';
 
 import {
-  createPostit, createBoard, previousBoard, nextBoard, setIndex,
+  createPostit, createBoard, previousBoard, nextBoard, setIndex, deleteBoard,
 } from '../actions/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,12 +45,15 @@ const mapDispatchToProps = (dispatch) => ({
   nextBoard: (flag) => dispatch(nextBoard({}, { propagate: flag })),
   previousBoard: (flag) => dispatch(previousBoard({}, { propagate: flag })),
   setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
+  deleteBoard: (idBoard, flag) => dispatch(deleteBoard({ id: idBoard }, { propagate: flag })),
 });
 
 function AppToolbar(props) {
   const classes = useStyles();
+  // eslint-disable-next-line no-unused-vars
   const { boards, index, boardNameDisplay } = props;
   const [state, setState] = useState(false);
+  const [fullScreen, setfullScreen] = useState(false);
   const [postitFormState, setPostitFormState] = useState(false);
   const [boardName, setBoardName] = useState('');
   const [boardsTitle, setboardsTitle] = useState('');
@@ -71,6 +76,10 @@ function AppToolbar(props) {
 
   const handleClickOpen = () => {
     setPostitFormState(true);
+  };
+
+  const handleFormNoAction = () => {
+    setPostitFormState(false);
   };
 
   const handleFormClose = () => {
@@ -98,6 +107,23 @@ function AppToolbar(props) {
 
   const handleFullscreenClick = () => {
     document.documentElement.requestFullscreen();
+    setfullScreen(true);
+  };
+
+  const handleFullscreenExit = () => {
+    document.exitFullscreen();
+    setfullScreen(false);
+  };
+
+  const handleDeleteBoardClick = (idB) => {
+    props.deleteBoard(idB, true);
+  };
+
+  const GetIndexTitle = () => {
+    if (boards.findIndex((e) => e.id === index.toString()) === -1 || boards.length === 0) {
+      return -1;
+    }
+    return boards.findIndex((e) => e.id === index.toString());
   };
 
   return (
@@ -114,7 +140,7 @@ function AppToolbar(props) {
             onLinkClick={handleOnLinkClick}
           />
           <Typography variant="h6" className={classes.title}>
-            {boardNameDisplay}
+            {GetIndexTitle() !== -1 ? boards[GetIndexTitle()].title : ''}
           </Typography>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnPreviousClick}>
             <NavigateBeforeIcon />
@@ -122,8 +148,19 @@ function AppToolbar(props) {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnNextClick}>
             <NavigateNextIcon />
           </IconButton>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleFullscreenClick}>
-            <FullscreenIcon />
+          {fullScreen === false
+            ? (
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleFullscreenClick}>
+                <FullscreenIcon />
+              </IconButton>
+            )
+            : (
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleFullscreenExit}>
+                <FullscreenExitIcon />
+              </IconButton>
+            )}
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => handleDeleteBoardClick(index.toString())}>
+            <DeleteIcon />
           </IconButton>
           <Fab onClick={handleClickOpen} color="secondary" aria-label="add">
             <AddIcon />
@@ -136,7 +173,7 @@ function AppToolbar(props) {
             boardsTitle={boardsTitle}
             handleBNameOnChange={handleBNameOnChange}
             handleBNotesOnChange={handleBNotesOnChange}
-
+            onCloseNoAction={handleFormNoAction}
           />
         </Toolbar>
       </AppBar>
@@ -155,6 +192,7 @@ AppToolbar.propTypes = {
   createBoard: PropTypes.func.isRequired,
   previousBoard: PropTypes.func.isRequired,
   nextBoard: PropTypes.func.isRequired,
+  deleteBoard: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppToolbar));

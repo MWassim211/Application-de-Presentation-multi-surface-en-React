@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 function FormPostitDialog(props) {
   // eslint-disable-next-line react/prop-types
-  const { open, onFormClose } = props;
+  const { open, onFormClose,onCloseNoAction } = props;
   const {
     boardName, boardsTitle, postitDesc, postitTitle, action, postitVisible, postitColor,
     onPostitFormClose,
@@ -49,6 +49,9 @@ function FormPostitDialog(props) {
               />
             </DialogContent>
             <DialogActions>
+            <Button onClick={onCloseNoAction} color="primary">
+                Annuler
+              </Button>
               <Button onClick={onFormClose} color="primary">
                 Create
               </Button>
@@ -101,6 +104,9 @@ function FormPostitDialog(props) {
 
               </DialogContent>
               <DialogActions>
+              <Button onClick={onCloseNoAction} color="primary">
+                  Annuler
+                </Button>
                 <Button onClick={onPostitFormClose} color="primary">
                   Create
                 </Button>
@@ -129,6 +135,7 @@ FormPostitDialog.propType = {
   postitVisible: PropTypes.string,
   postitColor: PropTypes.string,
   onPostitFormClose: PropTypes.func,
+  onCloseNoAction: PropTypes.func,
 };
 FormPostitDialog.defaultProps = {
   // handleBNotesOnChange: null,
