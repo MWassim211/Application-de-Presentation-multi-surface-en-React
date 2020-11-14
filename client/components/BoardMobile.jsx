@@ -78,7 +78,6 @@ function BoardMobile(props) {
   const [postitFormState, setPostitFormState] = useState(false);
   const [postitTitle, setpostitTitle] = useState('');
   const [postitDesc, setpostitDesc] = useState('');
-  const [visible, setVisible] = useState(true);
   const [color, setColor] = useState('#fff');
   const location = useLocation();
 
@@ -98,10 +97,6 @@ function BoardMobile(props) {
     setColor(e.target.value);
   };
 
-  const handleVosibleOnChange = (e) => {
-    setVisible(e.target.value);
-  };
-
   const handleNoAction = () => {
     setPostitFormState(false);
   };
@@ -112,7 +107,6 @@ function BoardMobile(props) {
     props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), true);
     setpostitDesc('');
     setpostitTitle('');
-    setVisible('');
     setColor('');
   };
 
@@ -199,12 +193,10 @@ function BoardMobile(props) {
         onCloseNoAction={handleNoAction}
         postitDesc={postitDesc}
         postitTitle={postitTitle}
-        postitVisible={visible}
         postitColor={color}
         handlePdescOnchange={handlePdescOnchange}
         handlePTitleOnChange={handlePTitleOnChange}
         handleColorOnChange={handleColorOnChange}
-        handleVisibleOnChange={handleVosibleOnChange}
       />
     </div>
   );

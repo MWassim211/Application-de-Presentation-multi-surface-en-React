@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  appBar: {
+    top: 0,
+    bottom: 'auto',
+  },
 }));
 
 const mapStateToProps = (state) => ({
@@ -128,7 +132,7 @@ function AppToolbar(props) {
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <IconButton onClick={handleOnClickMenu} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />

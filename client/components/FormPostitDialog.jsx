@@ -12,9 +12,9 @@ import PropTypes from 'prop-types';
 function FormPostitDialog(props) {
   const { open, onFormClose, onCloseNoAction } = props;
   const {
-    boardName, boardsTitle, postitDesc, postitTitle, action, postitVisible, postitColor,
+    boardName, boardsTitle, postitDesc, postitTitle, action, postitColor,
     onPostitFormClose,
-    handleVisibleOnChange, handleColorOnChange,
+    handleColorOnChange,
   } = props;
   const {
     handleBNameOnChange, handleBNotesOnChange, handlePdescOnchange, handlePTitleOnChange,
@@ -85,15 +85,6 @@ function FormPostitDialog(props) {
                 <TextField
                   margin="dense"
                   id="postitvisible"
-                  label="Visible"
-                  type="text"
-                  value={postitVisible}
-                  onChange={(e) => handleVisibleOnChange(e)}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  id="postitvisible"
                   label="Color"
                   type="text"
                   value={postitColor}
@@ -129,9 +120,7 @@ FormPostitDialog.propType = {
   handleBNotesOnChange: PropTypes.func,
   handlePdescOnchange: PropTypes.func,
   handlePTitleOnChange: PropTypes.func,
-  handleVisibleOnChange: PropTypes.func,
   handleColorOnChange: PropTypes.func,
-  postitVisible: PropTypes.string,
   postitColor: PropTypes.string,
   onPostitFormClose: PropTypes.func,
   onCloseNoAction: PropTypes.func,
@@ -139,11 +128,9 @@ FormPostitDialog.propType = {
 FormPostitDialog.defaultProps = {
   handleBNotesOnChange: null,
   handlePTitleOnChange: null,
-  handleVisibleOnChange: null,
   handleColorOnChange: null,
   handlePdescOnchange: null,
   handleBNameOnChange: null,
-  postitVisible: '',
   postitColor: '',
   onPostitFormClose: null,
   onFormClose: null,

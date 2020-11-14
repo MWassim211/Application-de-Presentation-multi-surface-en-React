@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   drawerPaper: { width: 'inherit' },
+  iconDrawer: {
+    flow: 1,
+  },
 });
 
 function Drawer({
@@ -25,11 +28,15 @@ function Drawer({
       classes={{ paper: classes.drawerPaper }}
     >
       <List>
+        <ListItem style={{ justifyContent: 'center' }}><b>Boards List</b></ListItem>
+        <Divider />
         {boards.map((element) => (
           <ListItem key={element.id} onClick={() => onLinkClick(element.id)}>
             <Button>
               <ListAltIcon />
-              {element.title}
+              <div className={classes.iconDrawer}>
+                {element.title}
+              </div>
             </Button>
           </ListItem>
         ))}

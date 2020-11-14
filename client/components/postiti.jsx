@@ -1,5 +1,4 @@
-/* eslint-disable  */
-import React , {useRef,  useEffect}from 'react';
+import React, { useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,18 +11,21 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
-import {useParams} from 'react-router-dom';
-import { addDrawPoints ,resetDrawPoints, nextBoard, previousBoard, setIndex,nextPostit , previousPostit} from '../actions/index';
+import { useParams } from 'react-router-dom';
 import RestoreIcon from '@material-ui/icons/Restore';
+import PropTypes from 'prop-types';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {
+  addDrawPoints, resetDrawPoints, nextBoard, previousBoard, setIndex, nextPostit, previousPostit,
+} from '../actions/index';
 import OneDollar from '../OneDollar';
 import suivantData from '../assets/suivantData';
 import precedentData from '../assets/precedentData';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
-    height : 150,
+    height: 150,
 
   },
   fullHeightCard: {
@@ -33,64 +35,57 @@ const useStyles = makeStyles({
     marginLeft: 'auto',
     color: 'secondary',
   },
+  colorIcon: {
+    marginLeft: 'auto',
+  },
   editBtn: {
     color: green[500],
   },
-  box : {
-    height : 5,
-  }
+  box: {
+    height: 5,
+  },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    // drawing: state.drawing,
-    currentPostit : state.currentPostit,
-    
-  };
-};
+const mapStateToProps = (state) => ({
+  // drawing: state.drawing,
+  currentPostit: state.currentPostit,
 
-const mapDispatchProps = (dispatch) => {
-  return {
-    addPoints: (x, y, drag,id,idPostit,flag) => dispatch(addDrawPoints({x, y, drag,id,idPostit}, {propagate :flag})),
-    resetPoints : (id,idPostit,flag) => dispatch(resetDrawPoints({id,idPostit}, {propagate :flag})),
-    nextBoard: (flag) => dispatch(nextBoard({}, { propagate: flag })),
-    previousBoard: (flag) => dispatch(previousBoard({}, { propagate: flag })),
-    setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
-    nextPostit: (id, idPostit, flag) => dispatch(nextPostit({ id, idPostit }, { propagate: flag })),
-    prevPostit: (id, idPostit, flag) => dispatch(previousPostit({ id, idPostit },
+});
+
+const mapDispatchProps = (dispatch) => ({
+  addPoints: (x, y, drag, id, idPostit, flag) => dispatch(addDrawPoints({
+    x, y, drag, id, idPostit,
+  }, { propagate: flag })),
+  resetPoints: (id, idPostit, flag) => dispatch(resetDrawPoints({ id, idPostit },
+    { propagate: flag })),
+  nextBoard: (flag) => dispatch(nextBoard({}, { propagate: flag })),
+  previousBoard: (flag) => dispatch(previousBoard({}, { propagate: flag })),
+  setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
+  nextPostit: (id, idPostit, flag) => dispatch(nextPostit({ id, idPostit }, { propagate: flag })),
+  prevPostit: (id, idPostit, flag) => dispatch(previousPostit({ id, idPostit },
     { propagate: flag })),
 
-  };
-};
-
+});
 
 function postit(props) {
   const classes = useStyles();
-  const { param, handleOnDelete ,indexPostit, currentPostit} = props;
-  const {id} = useParams();
+  const {
+    param, handleOnDelete, indexPostit, currentPostit,
+  } = props;
+  const { id } = useParams();
   // const {clickX,clickY,clickDrag} = props.drawing;
-  const {drawing} = param;
-  var paint = false;
-  console.log(drawing);
-  console.log("---------------------------------------------")
-  var {clickX,clickY,clickDrag} = drawing;
-  // var clickX = new Array();
-  // var clickY = new Array();
-  // var clickDrag = new Array();
+  const { drawing } = param;
+  let paint = false;
+  const { clickX, clickY, clickDrag } = drawing;
 
-  const handleResetClick = (id,idPostit)=> {
-    props.resetPoints(id,idPostit,true);
-  }
-
-  useEffect(()=>{
-     redraw()
-  },[clickX])
+  const handleResetClick = (idB, idPostit) => {
+    props.resetPoints(idB, idPostit, true);
+  };
 
   useEffect(() => {
     document.body.addEventListener('touchmove', (evt) => evt.preventDefault(), { passive: false });
     return () => document.body.removeEventListener('touchmove', (evt) => evt.preventDefault());
   }, []);
-
 
   const options = {
     score: 80, // The similarity threshold to apply the callback(s)
@@ -101,7 +96,7 @@ function postit(props) {
   };
   const recognizer = new OneDollar(options);
 
-  recognizer.add("triangle", [
+  recognizer.add('triangle', [
     [627, 213],
     [626, 217],
     [617, 234],
@@ -147,7 +142,7 @@ function postit(props) {
     [658, 255],
     [658, 255],
   ]);
-  recognizer.add("circle", [
+  recognizer.add('circle', [
     [621, 225],
     [616, 225],
     [608, 225],
@@ -190,39 +185,38 @@ function postit(props) {
     [611, 188],
     [611, 188],
   ]);
-  recognizer.add("suivant",suivantData)
+  recognizer.add('suivant', suivantData);
 
-  recognizer.add("precedent",precedentData)
-  var gesturePoints = new Array();
-  // Cette ligne permet d'avoir accès à notre canvas après que le composant aie été rendu. Le canvas est alors disponible via refCanvas.current
-  // Si vous utilisez des Class Components plutôt que des function Components, voir ici https://stackoverflow.com/a/54620836
-  let refCanvas = useRef(null);
+  recognizer.add('precedent', precedentData);
+  let gesturePoints = [];
+  const refCanvas = useRef(null);
 
   function addClick(x, y, dragging) {
-    clickX.push(x), clickY.push(y), clickDrag.push(dragging);
-    // gesturePoints.push([x,y])
+    clickX.push(x);
+    clickY.push(y);
+    clickDrag.push(dragging);
   }
 
-  function addGesture(x,y){
-    gesturePoints.push([x,y])
+  function addGesture(x, y) {
+    gesturePoints.push([x, y]);
   }
 
   let gesture;
   function redraw() {
-    let context = refCanvas.current.getContext("2d");
-    let width = refCanvas.current.getBoundingClientRect().width;
-    let height = refCanvas.current.getBoundingClientRect().height;
-  
-    //Ceci permet d'adapter la taille du contexte de votre canvas à sa taille sur la page
-    refCanvas.current.setAttribute("width", width);
-    refCanvas.current.setAttribute("height", height);
+    const context = refCanvas.current.getContext('2d');
+    const { width } = refCanvas.current.getBoundingClientRect();
+    const { height } = refCanvas.current.getBoundingClientRect();
+
+    // Ceci permet d'adapter la taille du contexte de votre canvas à sa taille sur la page
+    refCanvas.current.setAttribute('width', width);
+    refCanvas.current.setAttribute('height', height);
     context.clearRect(0, 0, context.width, context.height); // Clears the canvas
-  
-    context.strokeStyle = "#df4b26";
-    context.lineJoin = "round";
+
+    context.strokeStyle = '#df4b26';
+    context.lineJoin = 'round';
     context.lineWidth = 2;
-  
-    for (var i = 0; i < clickX.length; i++) {
+
+    for (let i = 0; i < clickX.length; i += 1) {
       context.beginPath();
       if (clickDrag[i] && i) {
         context.moveTo(clickX[i - 1] * width, clickY[i - 1] * height);
@@ -245,123 +239,140 @@ function postit(props) {
       for (let i = 1; i < gesturePoints.length; i += 1) {
         context.lineTo(gesturePoints[i][0] * width - 1, gesturePoints[i][1] * height);
       }
-      
+
       context.stroke();
     }
   }
-  
+
   function pointerDownHandler(ev) {
-    console.error(
-      "HEY ! ICI ON PEUT DIFFERENCIER QUEL TYPE DE POINTEUR EST UTILISE !"
-    );
-  
-    let width = refCanvas.current.getBoundingClientRect().width;
-    let height = refCanvas.current.getBoundingClientRect().height;
-    var mouseX = (ev.pageX - refCanvas.current.offsetLeft) / width;
-    var mouseY = (ev.pageY - refCanvas.current.offsetTop) / height;
+    // console.error(
+    //   'HEY ! ICI ON PEUT DIFFERENCIER QUEL TYPE DE POINTEUR EST UTILISE !',
+    // );
+
+    const { width } = refCanvas.current.getBoundingClientRect();
+    const { height } = refCanvas.current.getBoundingClientRect();
     const { top, left } = refCanvas.current.getBoundingClientRect();
     paint = true;
 
-    switch (ev.pointerType){
-      case "pen":
+    switch (ev.pointerType) {
+      case 'pen':
         addClick(
           ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
           ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
           false,
         );
-      break;
-      case "touch":
+        break;
+      case 'touch':
         addGesture(
           ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
           ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
         );
-        console.log(gesturePoints)
-      break;
-      case "mouse": 
+        console.log(gesturePoints);
+        break;
+      case 'mouse':
         addClick(
           ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
           ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
           false,
         );
-      break;
+        break;
+      default:
+        redraw();
     }
     redraw();
   }
-  
+
   function pointerMoveHandler(ev) {
     if (paint) {
-      const { width, height, top, left } = refCanvas.current.getBoundingClientRect();
-      switch (ev.pointerType){
-        case "pen":
+      const {
+        width, height, top, left,
+      } = refCanvas.current.getBoundingClientRect();
+      switch (ev.pointerType) {
+        case 'pen':
           addClick(
             ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
             ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
             true,
           );
-        break;
-        case "touch":
+          break;
+        case 'touch':
           addGesture(
             ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
             ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
           );
-          console.log(gesturePoints)
-        break;
-        case "mouse": 
+          console.log(gesturePoints);
+          break;
+        case 'mouse':
           addClick(
             ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
             ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
             true,
           );
-        break;
+          break;
+        default:
+          redraw();
       }
       redraw();
     }
   }
-  
+
+  useEffect(() => {
+    redraw();
+  }, [clickX]);
+
   function pointerUpEvent(ev) {
-    switch (ev.pointerType){
-      case "pen":
-        props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
-      break;
-      case "touch":
-        if(gesture.recognized)
-          {switch (gesture.name){
-            case "triangle" : {
+    switch (ev.pointerType) {
+      case 'pen':
+        props.addPoints(clickX, clickY, clickDrag, id, indexPostit, true);
+        break;
+      case 'touch':
+        if (gesture.recognized) {
+          switch (gesture.name) {
+            case 'triangle': {
               props.nextBoard(true);
+              break;
             }
-            break;
-            case "circle" : {
+            case 'circle': {
               props.previousBoard(true);
+              break;
             }
-            break;
-            case "suivant" : {
-              props.nextPostit(id,currentPostit,false)
+            case 'suivant': {
+              props.nextPostit(id, currentPostit, false);
+              break;
             }
-            break;
-            case "precedent" : {
-              props.prevPostit(id,currentPostit,false)
+            case 'precedent': {
+              props.prevPostit(id, currentPostit, false);
+              break;
             }
-            break;
-          }} 
-          gesturePoints = []
-      break;
-      case "mouse": 
-        props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
-      break;
+            default: {
+              break;
+            }
+          }
+        }
+        gesturePoints = [];
+        break;
+      case 'mouse':
+        props.addPoints(clickX, clickY, clickDrag, id, indexPostit, true);
+        break;
+      default: {
+        break;
+      }
     }
 
     // props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
-    
+
     paint = false;
   }
 
-
   return (
     <div>
-      <Card style={{backgroundColor: "yellow"}} >
+      <Card style={{ backgroundColor: 'yellow' }}>
         <CardContent className={classes.root}>
           <Typography gutterBottom variant="h5" component="h2">
             {param.title}
+            <IconButton edge="start" style={{ marginLeft: 'auto' }}>
+              <FiberManualRecordIcon />
+            </IconButton>
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {param.text}
@@ -373,7 +384,7 @@ function postit(props) {
               onPointerDown={pointerDownHandler}
               onPointerMove={pointerMoveHandler}
               onPointerUp={pointerUpEvent}
-            ></canvas>
+            />
           </Box>
         </CardContent>
         <Divider />
@@ -381,10 +392,10 @@ function postit(props) {
           <IconButton edge="start" className={classes.editBtn}>
             <EditIcon />
           </IconButton>
-          <IconButton edge="start" onClick={()=>handleResetClick(id,indexPostit)} >
+          <IconButton edge="start" onClick={() => handleResetClick(id, indexPostit)}>
             <RestoreIcon />
           </IconButton>
-          <IconButton edge="start" style={{marginLeft: 'auto'}} color= 'secondary' onClick={()=>handleOnDelete(param.board, param.title)}>
+          <IconButton edge="start" style={{ marginLeft: 'auto' }} color="secondary" onClick={() => handleOnDelete(param.board, param.title)}>
             <DeleteIcon />
           </IconButton>
         </CardActions>
@@ -396,7 +407,7 @@ function postit(props) {
 postit.propTypes = {
   param: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleOnDelete: PropTypes.func.isRequired,
-  indexPostit : PropTypes.number.isRequired,
+  indexPostit: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps,mapDispatchProps)(postit);
+export default connect(mapStateToProps, mapDispatchProps)(postit);
