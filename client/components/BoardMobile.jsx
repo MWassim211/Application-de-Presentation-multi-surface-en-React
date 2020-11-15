@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   addCard: {
     height: 150,
   },
+  title: {
+    padding: '4%',
+    justifyContent: 'center',
+  },
 }));
 
 const mapStateToProps = (state) => ({
@@ -46,8 +50,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   deletePositit: (idBoard, title, flag) => dispatch(deletePostit({ id: idBoard, title },
     { propagate: flag })),
-  createPostit: (desc, title, idBoard, flag) => dispatch(createPostit({ desc, title, idBoard },
-    { propagate: flag })),
+  createPostit: (desc, title, color, idBoard, flag) => dispatch(createPostit({
+    desc, title, color, idBoard,
+  },
+  { propagate: flag })),
   setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
   nextPostit: (id, idPostit, flag) => dispatch(nextPostit({ id, idPostit }, { propagate: flag })),
   prevPostit: (id, idPostit, flag) => dispatch(previousPostit({ id, idPostit },
@@ -104,7 +110,7 @@ function BoardMobile(props) {
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
-    props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), true);
+    props.createPostit(postitDesc, postitTitle, color, parseInt(uri.slice(1), 10), true);
     setpostitDesc('');
     setpostitTitle('');
     setColor('');
@@ -129,7 +135,8 @@ function BoardMobile(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ justifyContent: 'center' }}>
+      <div className={classes.title}>{boards[GetIndexElem()].title}</div>
       {GetIndexElem() !== -1 ? (
         <Grid className={classes.grid} container spacing={3} justify="flex-start">
           {boards[GetIndexElem()].postits[parseInt(idPostit, 10) - 1]
@@ -167,7 +174,7 @@ function BoardMobile(props) {
             )}
           {boards[GetIndexElem()].postits[parseInt(idPostit, 10) - 1] && (
           <Grid item lg={3} xs={12} md={4}>
-            <Card className={classes.addCard}>
+            <Card className={classes.addCard} style={{ backgroundColor: 'lightgray' }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2" style={{ justifyContent: 'center' }}>
                   Add new postit

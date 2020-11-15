@@ -44,6 +44,12 @@ const useStyles = makeStyles({
   box: {
     height: 5,
   },
+  canvas: {
+    width: '100%',
+    height: '100%',
+    // ...then set the internal size to match
+
+  },
 });
 
 const mapStateToProps = (state) => ({
@@ -358,9 +364,6 @@ function postit(props) {
         break;
       }
     }
-
-    // props.addPoints(clickX,clickY,clickDrag,id,indexPostit,true)
-
     paint = false;
   }
 
@@ -370,14 +373,14 @@ function postit(props) {
         <CardContent className={classes.root}>
           <Typography gutterBottom variant="h5" component="h2">
             {param.title}
-            <IconButton edge="start" style={{ marginLeft: 'auto' }}>
+            <IconButton edge="start" style={{ color: param.color }}>
               <FiberManualRecordIcon />
             </IconButton>
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {param.text}
           </Typography>
-          <Box className={classes.box}>
+          <Box className={classes.canvas}>
             <canvas
               className="stroke"
               ref={refCanvas}

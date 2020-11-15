@@ -18,7 +18,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <div className="app">
-          <AppToolbar />
+          <AppToolbar isMobile={isMobile} />
 
           <Switch>
             { isMobile && <Redirect exact from="/:id" to="/:id/postit/1" />}

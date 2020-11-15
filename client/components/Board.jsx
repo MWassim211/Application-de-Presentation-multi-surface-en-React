@@ -47,8 +47,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   deletePositit: (idBoard, title, flag) => dispatch(deletePostit({ id: idBoard, title },
     { propagate: flag })),
-  createPostit: (desc, title, idBoard, flag) => dispatch(createPostit({ desc, title, idBoard },
-    { propagate: flag })),
+  createPostit: (desc, title, idBoard, color, flag) => dispatch(createPostit({
+    desc, title, idBoard, color,
+  },
+  { propagate: flag })),
   setIndex: (index, flag) => dispatch(setIndex({ index }, { propagate: flag })),
 });
 
@@ -94,7 +96,7 @@ function Board(props) {
   const handlePostitFormSubmit = () => {
     setPostitFormState(false);
     const uri = location.pathname;
-    props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), true);
+    props.createPostit(postitDesc, postitTitle, parseInt(uri.slice(1), 10), color, true);
     setpostitDesc('');
     setpostitTitle('');
     setColor('');

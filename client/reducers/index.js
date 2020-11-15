@@ -102,7 +102,7 @@ function rootReducer(state = initialState, action) {
         title: action.payload.title,
         text: action.payload.desc,
         visible: true,
-        color: '#0E0',
+        color: action.payload.color,
         drawing: {
           clickX: [],
           clickY: [],
@@ -225,6 +225,7 @@ function rootReducer(state = initialState, action) {
     }
     case NEXT_POSTIT: {
       const indexElem = state.boards.findIndex((e) => e.id === action.payload.id);
+      if (indexElem === -1) { return state; }
       const maxlengthPostitTab = state.boards[indexElem].postits.length;
       let indexPostit = parseInt(action.payload.idPostit, 10);
       if (maxlengthPostitTab === 0) {
@@ -243,6 +244,7 @@ function rootReducer(state = initialState, action) {
     }
     case PREVIOUS_POSTIT: {
       const indexElem = state.boards.findIndex((e) => e.id === action.payload.id);
+      if (indexElem === -1) { return state; }
       const maxlengthPostitTab = state.boards[indexElem].postits.length;
       let indexPostit = parseInt(action.payload.idPostit, 10);
       if (maxlengthPostitTab === 0) {

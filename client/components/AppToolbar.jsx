@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
 function AppToolbar(props) {
   const classes = useStyles();
   // eslint-disable-next-line no-unused-vars
-  const { boards, index } = props;
+  const { boards, index, isMobile } = props;
   const [state, setState] = useState(false);
   const [fullScreen, setfullScreen] = useState(false);
   const [postitFormState, setPostitFormState] = useState(false);
@@ -144,7 +144,7 @@ function AppToolbar(props) {
             onLinkClick={handleOnLinkClick}
           />
           <Typography variant="h6" className={classes.title}>
-            {GetIndexTitle() !== -1 ? boards[GetIndexTitle()].title : ''}
+            { !isMobile && GetIndexTitle() !== -1 ? boards[GetIndexTitle()].title : '' }
           </Typography>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleOnPreviousClick}>
             <NavigateBeforeIcon />
@@ -196,6 +196,7 @@ AppToolbar.propTypes = {
   previousBoard: PropTypes.func.isRequired,
   nextBoard: PropTypes.func.isRequired,
   deleteBoard: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppToolbar));
