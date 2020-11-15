@@ -255,7 +255,7 @@ function postit(props) {
     // console.error(
     //   'HEY ! ICI ON PEUT DIFFERENCIER QUEL TYPE DE POINTEUR EST UTILISE !',
     // );
-    if (ev.pointerType === 'mouse' || ev.pointerType === 'touch') {
+    if (ev.pointerType === 'pen' || ev.pointerType === 'touch') {
       // const { width } = refCanvas.current.getBoundingClientRect();
       // const { height } = refCanvas.current.getBoundingClientRect();
       // const { top, left } = refCanvas.current.getBoundingClientRect();
@@ -266,7 +266,7 @@ function postit(props) {
       const mouseY = (ev.pageY - refCanvas.current.offsetTop) / height;
 
       paint = true;
-      if (ev.pointerType === 'mouse') { addClick(mouseX, mouseY, false); } else { addGesture(mouseX, mouseY); }
+      if (ev.pointerType === 'pen') { addClick(mouseX, mouseY, false); } else { addGesture(mouseX, mouseY); }
       redraw();
     }
 
