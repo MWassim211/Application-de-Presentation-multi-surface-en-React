@@ -62,9 +62,7 @@ function Board(props) {
     const elem = boards.findIndex((e) => e.id === id);
     if (elem === -1) {
       props.history.push(`/${index}`);
-    } else {
-      props.setIndex(id, true);
-    }
+    } else if (id === index) props.setIndex(id, true);
   }, [id]);
 
   const [postitFormState, setPostitFormState] = useState(false);

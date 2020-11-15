@@ -136,7 +136,7 @@ function BoardMobile(props) {
   };
 
   return (
-    <div className={classes.title}>
+    <div className={classes.root}>
       <div className={classes.title}>{boards[GetIndexElem()].title}</div>
       {GetIndexElem() !== -1 ? (
         <Grid className={classes.grid} container spacing={3} justify="flex-start">

@@ -88,11 +88,6 @@ function postit(props) {
     props.resetPoints(idB, idPostit, true);
   };
 
-  useEffect(() => {
-    document.body.addEventListener('touchmove', (evt) => evt.preventDefault(), { passive: false });
-    return () => document.body.removeEventListener('touchmove', (evt) => evt.preventDefault());
-  }, []);
-
   const options = {
     score: 80, // The similarity threshold to apply the callback(s)
     parts: 64, // The number of resampling points
@@ -201,6 +196,7 @@ function postit(props) {
     clickX.push(x);
     clickY.push(y);
     clickDrag.push(dragging);
+    // gesturePoints.push([x, y]);
   }
 
   function addGesture(x, y) {
@@ -250,75 +246,106 @@ function postit(props) {
     }
   }
 
+  useEffect(() => {
+    document.body.addEventListener('touchmove', (evt) => evt.preventDefault(), { passive: false });
+    return () => document.body.removeEventListener('touchmove', (evt) => evt.preventDefault());
+  }, []);
+
   function pointerDownHandler(ev) {
     // console.error(
     //   'HEY ! ICI ON PEUT DIFFERENCIER QUEL TYPE DE POINTEUR EST UTILISE !',
     // );
+    if (ev.pointerType === 'mouse' || ev.pointerType === 'touch') {
+      // const { width } = refCanvas.current.getBoundingClientRect();
+      // const { height } = refCanvas.current.getBoundingClientRect();
+      // const { top, left } = refCanvas.current.getBoundingClientRect();
+      // paint = true;
+      const { width } = refCanvas.current.getBoundingClientRect();
+      const { height } = refCanvas.current.getBoundingClientRect();
+      const mouseX = (ev.pageX - refCanvas.current.offsetLeft) / width;
+      const mouseY = (ev.pageY - refCanvas.current.offsetTop) / height;
 
-    const { width } = refCanvas.current.getBoundingClientRect();
-    const { height } = refCanvas.current.getBoundingClientRect();
-    const { top, left } = refCanvas.current.getBoundingClientRect();
-    paint = true;
-
-    switch (ev.pointerType) {
-      case 'pen':
-        addClick(
-          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-          false,
-        );
-        break;
-      case 'touch':
-        addGesture(
-          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-        );
-        console.log(gesturePoints);
-        break;
-      case 'mouse':
-        addClick(
-          ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-          ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-          false,
-        );
-        break;
-      default:
-        redraw();
+      paint = true;
+      if (ev.pointerType === 'mouse') { addClick(mouseX, mouseY, false); } else { addGesture(mouseX, mouseY); }
+      redraw();
     }
-    redraw();
+
+    // switch (ev.pointerType) {
+    //   case 'pen':
+    //     addClick(
+    //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+    //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+    //       false,
+    //     );
+    //     break;
+    //   case 'touch':
+    //     addGesture(
+    //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+    //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+    //     );
+    //     break;
+    //   case 'mouse':
+    //     addClick(
+    //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+    //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+    //       false,
+    //     );
+    //     break;
+    //   default:
+    //     redraw();
+    // }
+    // redraw();
   }
 
   function pointerMoveHandler(ev) {
     if (paint) {
-      const {
-        width, height, top, left,
-      } = refCanvas.current.getBoundingClientRect();
-      switch (ev.pointerType) {
-        case 'pen':
+      // const {
+      //   width, height, top, left,
+      // } = refCanvas.current.getBoundingClientRect();
+      // switch (ev.pointerType) {
+      //   case 'pen':
+      //     addClick(
+      //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+      //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+      //       true,
+      //     );
+      //     break;
+      //   case 'touch':
+      //     addGesture(
+      //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+      //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+      //     );
+      //     redraw();
+      //     console.log(gesturePoints);
+      //     break;
+      //   case 'mouse':
+      //     addClick(
+      //       ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
+      //       ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+      //       true,
+      //     );
+      //     break;
+      //   default:
+      //     redraw();
+      // }
+      // redraw();
+      if (paint) {
+        const { width } = refCanvas.current.getBoundingClientRect();
+        const { height } = refCanvas.current.getBoundingClientRect();
+        if (ev.pointerType === 'pen') {
           addClick(
-            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+            (ev.pageX - refCanvas.current.offsetLeft) / width,
+            (ev.pageY - refCanvas.current.offsetTop) / height,
             true,
           );
-          break;
-        case 'touch':
+        } else {
           addGesture(
-            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
+            (ev.pageX - refCanvas.current.offsetLeft) / width,
+            (ev.pageY - refCanvas.current.offsetTop) / height,
           );
-          console.log(gesturePoints);
-          break;
-        case 'mouse':
-          addClick(
-            ((ev.pageX || ev.changedTouches[0].pageX) - left) / width,
-            ((ev.pageY || ev.changedTouches[0].pageY) - top) / height,
-            true,
-          );
-          break;
-        default:
-          redraw();
+        }
+        redraw();
       }
-      redraw();
     }
   }
 
@@ -327,44 +354,26 @@ function postit(props) {
   }, [clickX]);
 
   function pointerUpEvent(ev) {
-    switch (ev.pointerType) {
-      case 'pen':
-        props.addPoints(clickX, clickY, clickDrag, id, indexPostit, true);
-        break;
-      case 'touch':
-        if (gesture.recognized) {
-          switch (gesture.name) {
-            case 'triangle': {
-              props.nextBoard(true);
-              break;
-            }
-            case 'circle': {
-              props.previousBoard(true);
-              break;
-            }
-            case 'suivant': {
-              props.nextPostit(id, currentPostit, false);
-              break;
-            }
-            case 'precedent': {
-              props.prevPostit(id, currentPostit, false);
-              break;
-            }
-            default: {
-              break;
-            }
-          }
-        }
-        gesturePoints = [];
-        break;
-      case 'mouse':
-        props.addPoints(clickX, clickY, clickDrag, id, indexPostit, true);
-        break;
-      default: {
-        break;
-      }
-    }
     paint = false;
+    gesture = recognizer.check(gesturePoints);
+    if (gesture.recognized && ev.pointerType === 'touch') {
+      switch (gesture.name) {
+        case 'suivant': {
+          props.nextPostit(id, currentPostit, false);
+          break;
+        }
+        case 'precedent': {
+          props.prevPostit(id, currentPostit, false);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    } else if (ev.pointerType === 'mouse') {
+      props.addPoints(clickX, clickY, clickDrag, id, indexPostit, true);
+    }
+    gesturePoints = [];
   }
 
   return (
