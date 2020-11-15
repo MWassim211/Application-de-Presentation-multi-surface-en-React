@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     padding: '4%',
     justifyContent: 'center',
+    textAlign: 'center',
   },
 }));
 
@@ -135,7 +136,7 @@ function BoardMobile(props) {
   };
 
   return (
-    <div className={classes.root} style={{ justifyContent: 'center' }}>
+    <div className={classes.title}>
       <div className={classes.title}>{boards[GetIndexElem()].title}</div>
       {GetIndexElem() !== -1 ? (
         <Grid className={classes.grid} container spacing={3} justify="flex-start">
