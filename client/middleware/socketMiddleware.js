@@ -2,21 +2,16 @@ import io from 'socket.io-client';
 import {
   CREATE_POSTIT, SET_INDEX, NEXT_BOARD, PREVIOUS_BOARD, DELETE_POSTIT,
   DELETE_BOARD, ADD_DRAW_POINTS, CREATE_BOARD, RESET_DRAW_POINTS,
-// eslint-disable-next-line import/no-duplicates
-} from '../actions/index';
-
-import {
   setIndex, createPostit, createBoard, deletePostit, deleteBoard, nextBoard,
   previousBoard, addDrawPoints, resetDrawPoints,
-// eslint-disable-next-line import/no-duplicates
 } from '../actions/index';
+
 // eslint-disable-next-line import/no-cycle
 import store from '../store/index';
 
 const socket = io.connect();
 
 socket.on('action_response', (msg) => {
-  // eslint-disable-next-line default-case
   switch (msg.type) {
     case SET_INDEX:
       store.dispatch(setIndex({ index: msg.payload.index.toString() }, { propagate: false }));

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -108,7 +107,7 @@ function FormPostitDialog(props) {
   );
 }
 
-FormPostitDialog.propType = {
+FormPostitDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   action: PropTypes.string.isRequired,
   onFormClose: PropTypes.func,
@@ -138,6 +137,7 @@ FormPostitDialog.defaultProps = {
   boardsTitle: null,
   postitDesc: null,
   postitTitle: null,
+  onCloseNoAction: null,
 };
 
 export default FormPostitDialog;

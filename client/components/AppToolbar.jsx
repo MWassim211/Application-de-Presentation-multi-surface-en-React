@@ -54,7 +54,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 function AppToolbar(props) {
   const classes = useStyles();
-  // eslint-disable-next-line no-unused-vars
   const { boards, index, isMobile } = props;
   const [state, setState] = useState(false);
   const [fullScreen, setfullScreen] = useState(false);

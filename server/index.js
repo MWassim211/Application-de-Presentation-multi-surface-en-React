@@ -26,7 +26,6 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
   socket.on('action', (msg) => { socket.broadcast.emit('action_response', msg); });
 });
 

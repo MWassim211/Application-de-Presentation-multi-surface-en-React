@@ -63,7 +63,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 function BoardMobile(props) {
   const classes = useStyles();
-  // eslint-disable-next-line no-unused-vars
   const {
     boards, index, currentPostit,
   } = props;
